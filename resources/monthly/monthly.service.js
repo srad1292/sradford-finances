@@ -1,4 +1,5 @@
 const Convert = require('../../utils/snake_and_camel');
+const Money = require('../../utils/money');
 
 MonthlyService = {
     updateColumns: ['id'],
@@ -11,7 +12,13 @@ MonthlyService = {
         MonthlyService.createColumns.forEach(c => {
             let key = Convert.snakeToCamel(c);
             if(c === 'finance_date') {
-
+                if(body[key] === undefined) {
+                    errors.push({property: key, error: `Is a required field`});
+                } else if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(body[key]) === false) {
+                    errors.push({property: key, error: `Must be in the format 'yyyy-mm-dd'`});
+                } else if((new Date(body[key])).toString() === 'Invalid Date') {
+                    errors.push({property: key, error: `Must be a valid date`});
+                }
             } else {
                 if(body[key] === undefined) {
                     // errors.push(`${key} is a required field`);
@@ -37,7 +44,7 @@ MonthlyService = {
                 if(body[key] === undefined) {
                     return 0;
                 }
-                return body[key] * 100;
+                return Money.moneyToCents(body[key]);
             }
         });
     
