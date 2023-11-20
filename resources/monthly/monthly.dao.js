@@ -1,5 +1,6 @@
 const MonthlyService = require('./monthly.service');
 const DatabaseTable = require('../../utils/database_table.enum');
+const DatabaseColumns = require('../../utils/database_columns.enum');
 const DatabaseException = require('../../errors/database_exception');
 
 MonthlyDao = {
@@ -17,6 +18,15 @@ MonthlyDao = {
             // return {id: 1000, ...body};
         } catch (e) {
             throw new DatabaseException("Error creating monthly data: " + e, 500);
+        }
+    },
+    getAllMonthlyData: async (db) => {
+        let sql = `SELECT * FROM ${DatabaseTable.monthly} ORDER BY ${DatabaseColumns.MonthlyColumns.FinanceDate};`
+        try {
+            let data = await db.all(sql);
+            return MonthlyService.convertMonthlyDbToJson(data);  
+        } catch(e) {
+            throw new DatabaseException("Error getting monthly data: " + e, 500);
         }
     }    
 }

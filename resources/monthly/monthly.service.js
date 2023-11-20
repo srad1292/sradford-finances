@@ -1,5 +1,6 @@
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
+const DatabaseColumns = require('../../utils/database_columns.enum');
 
 MonthlyService = {
     updateColumns: ['id'],
@@ -49,6 +50,20 @@ MonthlyService = {
         });
     
         return {columns, placeholders, values};
+    },
+    convertMonthlyDbToJson: (data) => {
+        return data.map(row => {
+            let rowAsJs = {};
+            Object.entries(row).forEach(entry => {
+                let [key, value] = entry;
+                if(key === DatabaseColumns.MonthlyColumns.FinanceDate || key === DatabaseColumns.MonthlyColumns.Id) {
+                    rowAsJs[Convert.snakeToCamel(key)] = value;
+                } else {
+                    rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);
+                }
+            });
+            return rowAsJs;
+        });
     }
     
 }
