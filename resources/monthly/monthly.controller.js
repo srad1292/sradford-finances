@@ -24,7 +24,7 @@ MonthlyController = {
     getAllMonthlyData: async (req, res, next) => {
         try {
             const db = await Database.getDb();
-            const records = await monthlyDao.getAllMonthlyData(db);
+            const records = await MonthlyService.getAllData(db);
             res.status(200).send(records);
         } catch(e) {
             next(e);
