@@ -26,7 +26,7 @@ MonthlyDao = {
         let sql = `SELECT * FROM ${DatabaseTable.monthly} ORDER BY ${DatabaseColumns.MonthlyColumns.FinanceDate};`
         try {
             let data = await db.all(sql);
-            return MonthlyDao.convertMonthlyDbToJson(data);  
+            return data;
         } catch(e) {
             throw new DatabaseException("Error getting monthly data: " + e, 500);
         }
@@ -49,20 +49,7 @@ MonthlyDao = {
     
         return {columns, placeholders, values};
     },
-    convertMonthlyDbToJson: (data) => {
-        return data.map(row => {
-            let rowAsJs = {};
-            Object.entries(row).forEach(entry => {
-                let [key, value] = entry;
-                if(key === DatabaseColumns.MonthlyColumns.FinanceDate || key === DatabaseColumns.MonthlyColumns.Id) {
-                    rowAsJs[Convert.snakeToCamel(key)] = value;
-                } else {
-                    rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);
-                }
-            });
-            return rowAsJs;
-        });
-    },
+    
 }
 
 module.exports = MonthlyDao;

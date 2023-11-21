@@ -2,6 +2,8 @@ const monthlyDao = require("./monthly.dao");
 const Database = require("../../db");
 const MonthlyService = require("./monthly.service");
 const APIException = require("../../errors/api_exception");
+const DocumentManager = require("../../utils/document-manager");
+const MonthlyValidator = require("../monthly/monthly.validator");
 
 MonthlyController = {
     createMonthlyData: async (req, res, next) => {
@@ -25,7 +27,19 @@ MonthlyController = {
         try {
             const db = await Database.getDb();
             const records = await MonthlyService.getAllData(db);
-            res.status(200).send(records);
+            const result = MonthlyService.convertMonthlyDbToJson(records);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getAllMonthlyDataAsSpreadsheet: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const records = await MonthlyService.getAllData(db);
+            const sheetData = MonthlyService.convertMonthlyDbToSheet(records);
+            const sheet = await DocumentManager.CreateSpreadsheet(MonthlyValidator.createColumns, sheetData);
+            res.status(200).send(sheetData);
         } catch(e) {
             next(e);
         }

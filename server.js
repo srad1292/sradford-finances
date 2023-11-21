@@ -26,6 +26,7 @@ function setupRoutes() {
 
   app.post('/monthly-data', MonthlyController.createMonthlyData);
   app.get('/monthly-data', MonthlyController.getAllMonthlyData);
+  app.get('/monthly-data/spreadsheet', MonthlyController.getAllMonthlyDataAsSpreadsheet);
 }
 
 
