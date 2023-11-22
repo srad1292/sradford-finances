@@ -8,8 +8,10 @@ function camelToSnake(str) {
 
 function snakeToTitle(str) {
     if(str === undefined || str === "") { return str; }
-    str[0] = str[0].toUpperCase();
-    return str.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+    let first = str.charAt(0).toUpperCase();
+    str = first + str.slice(1);
+
+    return str.replace(/_([a-z])/g, (match, letter) => ` ${letter.toUpperCase()}`);
 }
 
 module.exports = {snakeToCamel, camelToSnake, snakeToTitle};

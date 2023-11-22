@@ -31,9 +31,9 @@ MonthlyService = {
             let data = [];
             MonthlyValidator.createColumns.forEach(column => {
                 if(column === DatabaseColumns.MonthlyColumns.FinanceDate) {
-                    data.push(row[column]);
+                    data.push({type: 'String', value: row[column]});
                 } else {
-                    data.push(Money.centsToMoney(row[column]));
+                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
                 }
             });
             return data;

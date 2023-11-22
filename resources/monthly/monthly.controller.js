@@ -4,6 +4,8 @@ const MonthlyService = require("./monthly.service");
 const APIException = require("../../errors/api_exception");
 const DocumentManager = require("../../utils/document-manager");
 const MonthlyValidator = require("../monthly/monthly.validator");
+const XL = require('excel4node');
+
 
 MonthlyController = {
     createMonthlyData: async (req, res, next) => {
@@ -38,8 +40,8 @@ MonthlyController = {
             const db = await Database.getDb();
             const records = await MonthlyService.getAllData(db);
             const sheetData = MonthlyService.convertMonthlyDbToSheet(records);
-            const sheet = await DocumentManager.CreateSpreadsheet(MonthlyValidator.createColumns, sheetData);
-            res.status(200).send(sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Finances', MonthlyValidator.createColumns, sheetData);
+            financeWorkbook.write('AllFinanceData.xlsx', res);
         } catch(e) {
             next(e);
         }
