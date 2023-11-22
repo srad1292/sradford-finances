@@ -40,8 +40,19 @@ MonthlyDao = {
             throw new DatabaseException("Error getting monthly data with id " + id + ": " + e, 500);
         }
     },
-    getAllMonthlyData: async (db) => {
-        let sql = `SELECT * FROM ${DatabaseTable.monthly} ORDER BY ${DatabaseColumns.MonthlyColumns.FinanceDate};`
+    getAllMonthlyData: async (db, filters) => {
+        let select = `SELECT * FROM ${DatabaseTable.monthly}`;
+        let where = '';
+        if(!!filters.startDate && !!filters.endDate) {
+            where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} >= '${filters.startDate}' AND ${DatabaseColumns.MonthlyColumns.FinanceDate} <= '${filters.endDate}'`;
+        } else if(!!filters.startDate) {
+            where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} >= '${filters.startDate}'`;
+        } else if(!!filters.endDate) {
+            where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} <= '${filters.endDate}'`;
+        }
+        let order = `ORDER BY ${DatabaseColumns.MonthlyColumns.FinanceDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
+        let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
+        console.log(sql);
         try {
             let data = await db.all(sql);
             return data;

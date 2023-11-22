@@ -11,8 +11,8 @@ MonthlyService = {
     getMonthlyDataById: async(db, id) => {
         return MonthlyDao.getMonthlyDataById(db, id);
     },
-    getAllData: async(db) => {
-        const records = await MonthlyDao.getAllMonthlyData(db);
+    getAllData: async(db, filter) => {
+        const records = await MonthlyDao.getAllMonthlyData(db, filter);
         return records;
     },
     convertMonthlyDbToJson: (data) => {

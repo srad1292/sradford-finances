@@ -39,7 +39,13 @@ MonthlyController = {
     getAllMonthlyData: async (req, res, next) => {
         try {
             const db = await Database.getDb();
-            const records = await MonthlyService.getAllData(db);
+            const filter = {
+                sort: req.query.sort,
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            console.log(filter);
+            const records = await MonthlyService.getAllData(db, filter);
             const result = records.map(r => MonthlyService.convertMonthlyDbToJson(r));
             res.status(200).send(result);
         } catch(e) {
