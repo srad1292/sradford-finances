@@ -25,11 +25,22 @@ MonthlyController = {
             next(e);
         }
     },
+    getMonthlyDataById: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const id = parseInt(await req.params['id']);
+            const record = await MonthlyService.getMonthlyDataById(db, id);
+            const result = MonthlyService.convertMonthlyDbToJson(record);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     getAllMonthlyData: async (req, res, next) => {
         try {
             const db = await Database.getDb();
             const records = await MonthlyService.getAllData(db);
-            const result = MonthlyService.convertMonthlyDbToJson(records);
+            const result = records.map(r => MonthlyService.convertMonthlyDbToJson(r));
             res.status(200).send(result);
         } catch(e) {
             next(e);

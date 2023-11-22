@@ -4,6 +4,7 @@ const DatabaseException = require('../../errors/database_exception');
 const MonthlyValidator = require('./monthly.validator');
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
+const APIException = require('../../errors/api_exception');
 
 MonthlyDao = {
     createMonthlyData: async (db, body) => {
@@ -20,6 +21,23 @@ MonthlyDao = {
             // return {id: 1000, ...body};
         } catch (e) {
             throw new DatabaseException("Error creating monthly data: " + e, 500);
+        }
+    },
+    getMonthlyDataById: async (db, id) => {
+        let sql = `SELECT * FROM ${DatabaseTable.monthly} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
+        try {
+            let data = await db.get(sql);
+            console.log("done with sql get by id");
+            console.log(data);
+            if(data === null || data === undefined) {
+                throw new APIException("No record found with ID: " + id, [], 404);
+            }
+            return data;
+        } catch(e) {
+            if(e instanceof APIException) {
+                throw(e);
+            }
+            throw new DatabaseException("Error getting monthly data with id " + id + ": " + e, 500);
         }
     },
     getAllMonthlyData: async (db) => {

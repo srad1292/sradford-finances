@@ -25,6 +25,7 @@ function setupRoutes() {
   });
 
   app.post('/monthly-data', MonthlyController.createMonthlyData);
+  app.get('/monthly-data/:id', MonthlyController.getMonthlyDataById);
   app.get('/monthly-data', MonthlyController.getAllMonthlyData);
   app.get('/monthly-data/spreadsheet', MonthlyController.getAllMonthlyDataAsSpreadsheet);
 }
