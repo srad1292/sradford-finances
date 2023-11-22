@@ -40,7 +40,7 @@ MonthlyDao = {
             throw new DatabaseException("Error getting monthly data with id " + id + ": " + e, 500);
         }
     },
-    getAllMonthlyData: async (db, filters) => {
+    getAllMonthlyData: async (db, filters = {}) => {
         let select = `SELECT * FROM ${DatabaseTable.monthly}`;
         let where = '';
         if(!!filters.startDate && !!filters.endDate) {

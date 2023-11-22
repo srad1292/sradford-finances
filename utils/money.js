@@ -1,5 +1,5 @@
 function moneyToCents(money) {
-    return parseInt(body[key].toFixed(2).replace('.', ''));
+    return parseInt(money.toFixed(2).replace('.', ''));
 }
 
 function centsToMoney(cents) {

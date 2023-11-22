@@ -6,8 +6,6 @@ const Money = require('../../utils/money');
 
 
 MonthlyService = {
-    
-    // Controller Helpers
     getMonthlyDataById: async(db, id) => {
         return MonthlyDao.getMonthlyDataById(db, id);
     },
@@ -15,6 +13,7 @@ MonthlyService = {
         const records = await MonthlyDao.getAllMonthlyData(db, filter);
         return records;
     },
+    // Helpers
     convertMonthlyDbToJson: (data) => {
         let rowAsJs = {};
         Object.entries(data).forEach(entry => {
