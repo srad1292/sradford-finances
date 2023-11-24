@@ -29,10 +29,31 @@ MonthlyService = {
         });
         return rowAsJs;
     },
+    convertMonthlyDbToExpensesJson: (data) => {
+        let result = [];
+        MonthlyValidator.expenseColumns.forEach((c) => result.push({label: c, value: 0}));
+        
+        for(let row = 0; row < data.length; row++) {
+            MonthlyValidator.expenseColumns.forEach((c, i) => {
+                if(!!data[row][c]) {
+                    result[i].value += data[row][c];
+                }
+
+                if(row === data.length-1) {
+                    result[i].value = Money.centsToMoney(result[i].value);
+                }
+            });
+        }
+
+        // console.log("Converted to expenses");
+        // console.log(result);
+        return result;
+        
+    },
     convertMonthlyDbToSheet: (data) => {
         return data.map(row => {
             let data = [];
-            MonthlyValidator.createColumns.forEach(column => {
+            MonthlyValidator.getCreateColumns().forEach(column => {
                 if(column === DatabaseColumns.MonthlyColumns.FinanceDate) {
                     data.push({type: 'String', value: row[column]});
                 } else {

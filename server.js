@@ -31,6 +31,7 @@ function setupRoutes() {
   app.delete('/monthly-data/:id', MonthlyController.deleteMonthlyRecord);
 
   app.get('/analytics', AnalyticsController.getImage);
+  app.get('/analytics/expenses-breakdown', AnalyticsController.getExpenseBreakdown);
 }
 
 

@@ -1,14 +1,15 @@
 const Convert = require('../../utils/snake_and_camel');
 
 MonthlyValidator = {
-    updateColumns: ['id'],
-    createColumns: ['finance_date', 'mortgage', 'utilities','insurance', 
+    expenseColumns: ['mortgage', 'utilities','insurance', 
     'car_payment', 'property_tax', 'taxes', 'groceries', 'entertainment', 'gifts', 
-    'eating_out', 'furniture', 'repairs', 'misc', 'salary', 'bonus', 'tax_refund',
-    ],
+    'eating_out', 'furniture', 'repairs', 'misc'],
+    earningsColumns: ['salary', 'bonus', 'tax_refund',],
+    updateColumns: ['id'],
+    getCreateColumns: () => { return ['finance_date', ...MonthlyValidator.expenseColumns, ...MonthlyValidator.earningsColumns]; },
     validateCreateData: (body) => {
         let errors = [];
-        MonthlyValidator.createColumns.forEach(c => {
+        MonthlyValidator.getCreateColumns().forEach(c => {
             let key = Convert.snakeToCamel(c);
             if(c === 'finance_date') {
                 if(body[key] === undefined) {

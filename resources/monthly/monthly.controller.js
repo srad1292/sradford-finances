@@ -55,7 +55,7 @@ MonthlyController = {
             const db = await Database.getDb();
             const records = await MonthlyService.getAllData(db);
             const sheetData = MonthlyService.convertMonthlyDbToSheet(records);
-            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Finances', MonthlyValidator.createColumns, sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Finances', MonthlyValidator.getCreateColumns(), sheetData);
             financeWorkbook.write('AllFinanceData.xlsx', res);
         } catch(e) {
             next(e);

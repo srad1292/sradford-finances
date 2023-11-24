@@ -77,9 +77,9 @@ MonthlyDao = {
     },
     // DAO Helpers
     getCreateData: (body) => {
-        let columns = "(" + MonthlyValidator.createColumns.join(",") + ")";
-        let placeholders = "(" + MonthlyValidator.createColumns.map(c => '?').join(',') + ")";
-        let values = MonthlyValidator.createColumns.map(c => {
+        let columns = "(" + MonthlyValidator.getCreateColumns().join(",") + ")";
+        let placeholders = "(" + MonthlyValidator.getCreateColumns().map(c => '?').join(',') + ")";
+        let values = MonthlyValidator.getCreateColumns().map(c => {
             let key = Convert.snakeToCamel(c);
             if(c === 'finance_date') {
                 return body[key];
