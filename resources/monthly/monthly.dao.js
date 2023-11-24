@@ -60,6 +60,21 @@ MonthlyDao = {
             throw new DatabaseException("Error getting monthly data: " + e, 500);
         }
     },
+    deleteMonthlyRecord: async (db, id) => {
+        let sql = `DELETE FROM ${DatabaseTable.monthly} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
+        try {
+            let result = await db.run(sql);
+            if(result === null || result === undefined || result.changes === 0) {
+                throw new APIException("No record found with ID: " + id, [], 404);
+            }
+            return result;
+        } catch(e) {
+            if(e instanceof APIException) {
+                throw(e);
+            }
+            throw new DatabaseException("Error getting monthly data with id " + id + ": " + e, 500);
+        }
+    },
     // DAO Helpers
     getCreateData: (body) => {
         let columns = "(" + MonthlyValidator.createColumns.join(",") + ")";

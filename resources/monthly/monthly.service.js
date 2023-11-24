@@ -7,11 +7,14 @@ const Money = require('../../utils/money');
 
 MonthlyService = {
     getMonthlyDataById: async(db, id) => {
-        return MonthlyDao.getMonthlyDataById(db, id);
+        return await MonthlyDao.getMonthlyDataById(db, id);
     },
     getAllData: async(db, filter) => {
         const records = await MonthlyDao.getAllMonthlyData(db, filter);
         return records;
+    },
+    deleteMonthlyRecord: async (db, id) => {
+        return await MonthlyDao.deleteMonthlyRecord(db, id);
     },
     // Helpers
     convertMonthlyDbToJson: (data) => {

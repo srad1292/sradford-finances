@@ -60,6 +60,15 @@ MonthlyController = {
         } catch(e) {
             next(e);
         }
+    },
+    deleteMonthlyRecord: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const result = await MonthlyService.deleteMonthlyRecord(db, req.params['id']);
+            res.status(200).send({status: 'success'});
+        } catch(e) {
+            next(e);
+        }
     }
 }
 
