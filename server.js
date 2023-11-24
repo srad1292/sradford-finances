@@ -4,7 +4,7 @@ const cors = require('cors');
 const Database = require('./db');
 const APIException = require('./errors/api_exception');
 const MonthlyController = require("./resources/monthly/monthly.controller");
-
+const AnalyticsController = require("./resources/analytics/analytics.controller");
 
 const app = express();
 const port = 3001;
@@ -29,6 +29,8 @@ function setupRoutes() {
   app.get('/monthly-data/spreadsheet', MonthlyController.getAllMonthlyDataAsSpreadsheet);
   app.get('/monthly-data/:id', MonthlyController.getMonthlyDataById);
   app.delete('/monthly-data/:id', MonthlyController.deleteMonthlyRecord);
+
+  app.get('/analytics', AnalyticsController.getImage);
 }
 
 
