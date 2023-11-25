@@ -10,17 +10,18 @@ AnalyticsController = {
         try {
             const db = await Database.getDb();
             const filter = {
-                sort: req.query.sort,
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            console.log(filter);
             const records = await MonthlyService.getAllData(db, filter);
-            const data = MonthlyService.convertMonthlyDbToExpensesJson(records);
-            let exampleConfig = AnalyticsService.createDoughnutChartConfig("Expenses", data, "Expenses Breakdown");
-            let chartImg = await AnalyticsService.createImage(exampleConfig);
+            let data = MonthlyService.convertMonthlyDbToExpensesJson(records);
+            data = data.sort((a,b) => req.query.sort === 'DESC' ? b.value - a.value : a.value - b.value);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+            };
+            const config = AnalyticsService.createHorizontalBarChartConfig(data, "Expenses Breakdown", options);
+            let chartImg = await AnalyticsService.createImage(config);
             chartImg = chartImg.replace("data:image/png;base64,", "");
-            // console.log(chartImg);
             const filePath = path.join(__dirname, "expenses-breakdown.png");
             const buffer = Buffer.from(chartImg, 'base64');
             fs.writeFileSync(filePath, buffer);

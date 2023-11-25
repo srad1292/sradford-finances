@@ -75,6 +75,7 @@ function financeErrorHandler(err, req, res, next) {
     console.log(err.errors);
     res.status(err.statusCode).send({message: err.message, errors: err.errors});
   } else {
+    console.log(err);
     res.status(500).send({error: "An unexpected error has occurred", message: err.message});
   }
 }

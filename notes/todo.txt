@@ -1,0 +1,7 @@
+Derive start and end date for expenses by type graph and display either in title or in dataset label
+
+Earnings vs expenses - double bar
+
+Expenses by month - vertical bar
+
+Earnings over time - line 

@@ -1,10 +1,45 @@
 const { ChartJSNodeCanvas  } = require('chartjs-node-canvas');
+const Convert = require('../../utils/snake_and_camel');
 
 AnalyticsService = {
-    createImage: async (configuration, height = 800, width = 800) => {
+    createImage: async (configuration, height = 1000, width = 1000) => {
         const chartJSNodeCanvas = new ChartJSNodeCanvas ({ type: 'png', width: width, height: height });
         const dataUrl = await chartJSNodeCanvas.renderToDataURL(configuration); // converts chart to image
         return dataUrl;
+    },
+    createVerticalBarChartConfig: (data, title, options) => {
+
+    },
+    createHorizontalBarChartConfig: (data, title, options = {}) => {
+        return config = {
+            type: 'bar',
+            data: {
+                labels: data.map(i => Convert.snakeToTitle(i.label)),
+                datasets: [
+                    {
+                        data: data.map(i => i.value),
+                        backgroundColor: options.mono === false ? AnalyticsService.getChartColors(data) : 'rgb(110, 178, 230)',
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                    },
+                    legend: {
+                        display: false
+                    },
+                }
+            }
+        };
     },
     /**
      * 
@@ -15,7 +50,31 @@ AnalyticsService = {
      */
     createDoughnutChartConfig: (label, data, title = "") => {
         return {
-            type: 'pie',
+            type: 'doughnut',
+            data: {
+                labels: data.map(i => i.label),
+                datasets: [
+                    {
+                        label: label,
+                        data: data.map(i => i.value),
+                        backgroundColor: AnalyticsService.getChartColors(data),
+                        hoverOffset: 2
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: title !== "",
+                        text: title
+                    }
+                }
+            }
+        };
+    },
+    createPieChartConfig: (label, data, title = "") => {
+        return {
+            type: 'doughnut',
             data: {
                 labels: data.map(i => i.label),
                 datasets: [

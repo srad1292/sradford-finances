@@ -1,6 +1,6 @@
 const MonthlyDao = require('./monthly.dao');
 const MonthlyValidator = require('./monthly.validator');
-const DatabaseColumns = require('../../utils/database_columns.enum');
+const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
 

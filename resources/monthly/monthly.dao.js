@@ -1,5 +1,5 @@
-const DatabaseTable = require('../../utils/database_table.enum');
-const DatabaseColumns = require('../../utils/database_columns.enum');
+const DatabaseTable = require('../../utils/database/database_table.enum');
+const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const DatabaseException = require('../../errors/database_exception');
 const MonthlyValidator = require('./monthly.validator');
 const Convert = require('../../utils/snake_and_camel');
