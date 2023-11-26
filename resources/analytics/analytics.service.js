@@ -23,7 +23,7 @@ AnalyticsService = {
         return result;
         
     },
-    convertMonthlyDbToExpenseOverTime: (data) => {
+    convertMonthlyDbToExpensePerMonth: (data) => {
         let result = [];
         
         for(let row = 0; row < data.length; row++) {
@@ -36,6 +36,25 @@ AnalyticsService = {
 
             sum = Money.centsToMoney(sum);
             result.push({label: data[row][DatabaseColumns.MonthlyColumns.FinanceDate], value: sum});
+        }
+
+        // console.log("Converted to expenses");
+        // console.log(result);
+        return result;
+        
+    },
+    convertMonthlyDbToExpenseOverTime: (data) => {
+        let result = [];
+
+        let sum = 0;
+        for(let row = 0; row < data.length; row++) {
+            MonthlyValidator.expenseColumns.forEach((c, i) => {
+                if(!!data[row][c]) {
+                    sum += data[row][c];
+                }
+            });
+
+            result.push({label: data[row][DatabaseColumns.MonthlyColumns.FinanceDate], value: Money.centsToMoney(sum)});
         }
 
         // console.log("Converted to expenses");

@@ -22,7 +22,7 @@ ChartService = {
             options: {
                 indexAxis: 'x',
                 scales: {
-                    x: {
+                    y: {
                         beginAtZero: true,
                     }
                 },
@@ -124,67 +124,36 @@ ChartService = {
             }
         };
     },
-    createLineConfig: () => {
-        return {
-            type: 'line',   // for line chart
-              data: {
-                  labels: [150,300,450,600,750,900,1050,1200,1350,1500],
-                  datasets: [{
-                      label: "sample 1",
-                      data: [100,43],
-                      fill: false,
-                      borderColor: ['rgba(255, 99, 132, 1)'],
-                      borderWidth: 1,
-                      xAxisID: 'xAxis1' //define top or bottm axis ,modifies on scale
-                  },
-                  {
-                      label: "sample 2",
-                      data: [72,83],
-                      fill: false,
-                      borderColor: ['rgba(265, 99, 132, 1)'],
-                      borderWidth: 1,
-                      xAxisID: 'xAxis1'
-                  },
-                  {
-                      label: "sample3",
-                      data: [30,56],
-                      fill: false,
-                      borderColor: ['rgba(235, 99, 122, 1)'],
-                      borderWidth: 1,
-                      xAxisID: 'xAxis1'
-                  }
-                  ],  
-              },
-              options: {
-                      scales: {
-                      xAxes:[
-                          {
-                          id:'xAxis1',
-                          position: 'bottom',
-                          type:"category",
-    
-                          },
-                          {
-                          id:'xAxis2',
-                          position: 'top',
-                          type:"category",
-                          ticks:{
-                              callback: function(value, index, values) {
-                                  return xLabels[index];  // gives points of top x axis
-                              }
-                      },
-                  }],
-                      yAxes: [{
-                      display: true,
-                      ticks: {
-                          max: 200,
-                          stepSize: 10, //defines y axis step scale
-                      }
-                  }]
-              ,
-                  }
-              }
+    createLineConfig: (data, title, options = {}) => {
+        return config = {
+            type: 'line',
+            data: {
+                labels: data.map(i => Convert.snakeToTitle(i.label)),
+                datasets: [
+                    {
+                        data: data.map(i => i.value),
+                        backgroundColor: options.mono === false ? AnalyticsService.getChartColors(data) : 'rgb(110, 178, 230)',
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                    },
+                    legend: {
+                        display: false
+                    },
+                }
             }
+        };
     },
     getChartColors: (data) => {
         let basicColors = [

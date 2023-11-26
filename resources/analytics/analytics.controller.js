@@ -5,8 +5,15 @@ const MonthlyService = require("../monthly/monthly.service");
 const path = require('path');
 const fs = require('fs');
 
-
 AnalyticsController = {
+    createAndSendImage: async(config, fileTitle, res) => {
+        let chartImg = await ChartService.createImage(config);
+        chartImg = chartImg.replace("data:image/png;base64,", "");
+        const filePath = path.join(__dirname, fileTitle);
+        const buffer = Buffer.from(chartImg, 'base64');
+        fs.writeFileSync(filePath, buffer);
+        res.status(200).sendFile(filePath);
+    },
     getExpensesByType: async(req, res, next) => {
         try {
             const db = await Database.getDb();
@@ -20,13 +27,26 @@ AnalyticsController = {
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
             };
-            const config = ChartService.createHorizontalBarChartConfig(data, "Expenses Breakdown", options);
-            let chartImg = await ChartService.createImage(config);
-            chartImg = chartImg.replace("data:image/png;base64,", "");
-            const filePath = path.join(__dirname, "expenses-breakdown.png");
-            const buffer = Buffer.from(chartImg, 'base64');
-            fs.writeFileSync(filePath, buffer);
-            res.status(200).sendFile(filePath);
+            const config = ChartService.createHorizontalBarChartConfig(data, "Expenses By Type", options);
+            AnalyticsController.createAndSendImage(config, "expenses-by-type.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getExpensesPerMonth: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            const records = await MonthlyService.getAllData(db, filter);
+            const data = AnalyticsService.convertMonthlyDbToExpensePerMonth(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+            };
+            const config = ChartService.createVerticalBarChartConfig(data, "Expenses By Month", options);
+            AnalyticsController.createAndSendImage(config, "expenses-by-month.png", res);
         } catch(e) {
             next(e);
         }
@@ -43,13 +63,8 @@ AnalyticsController = {
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
             };
-            const config = ChartService.createVerticalBarChartConfig(data, "Expenses Breakdown", options);
-            let chartImg = await ChartService.createImage(config);
-            chartImg = chartImg.replace("data:image/png;base64,", "");
-            const filePath = path.join(__dirname, "expenses-breakdown.png");
-            const buffer = Buffer.from(chartImg, 'base64');
-            fs.writeFileSync(filePath, buffer);
-            res.status(200).sendFile(filePath);
+            const config = ChartService.createLineConfig(data, "Expenses Over Time", options);
+            AnalyticsController.createAndSendImage(config, "expenses-over-time.png", res);
         } catch(e) {
             next(e);
         }
