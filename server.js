@@ -30,8 +30,8 @@ function setupRoutes() {
   app.get('/monthly-data/:id', MonthlyController.getMonthlyDataById);
   app.delete('/monthly-data/:id', MonthlyController.deleteMonthlyRecord);
 
-  app.get('/analytics', AnalyticsController.getImage);
-  app.get('/analytics/expenses-breakdown', AnalyticsController.getExpenseBreakdown);
+  app.get('/analytics/expenses-by-type', AnalyticsController.getExpensesByType);
+  app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
 }
 
 

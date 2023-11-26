@@ -1,4 +1,4 @@
-Derive start and end date for expenses by type graph and display either in title or in dataset label
+Derive start and end date for graphs and display either in title or in dataset label
 
 Earnings vs expenses - double bar
 
