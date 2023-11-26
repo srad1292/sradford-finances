@@ -2,6 +2,22 @@ const { ChartJSNodeCanvas  } = require('chartjs-node-canvas');
 const Convert = require('../../utils/snake_and_camel');
 
 ChartService = {
+    basicColors: [
+        'rgb(20, 150, 20)',
+        'rgb(212, 44, 6)',
+        'rgb(65, 250, 228)',
+        'rgb(237, 157, 38)',
+        'rgb(147, 51, 212)',
+        'rgb(247, 230, 96)',
+        'rgb(116, 237, 9)',
+        'rgb(242, 124, 126)',
+        'rgb(54, 52, 46)',
+        'rgb(124, 222, 242)',
+        'rgb(240, 134, 29)',
+        'rgb(65, 158, 104)',
+        'rgb(204, 80, 133)',
+        'rgb(105, 101, 230)',
+    ],
     createImage: async (configuration, height = 1000, width = 1000) => {
         const chartJSNodeCanvas = new ChartJSNodeCanvas ({ type: 'png', width: width, height: height });
         const dataUrl = await chartJSNodeCanvas.renderToDataURL(configuration); // converts chart to image
@@ -15,7 +31,7 @@ ChartService = {
                 datasets: [
                     {
                         data: data.map(i => i.value),
-                        backgroundColor: options.mono === false ? AnalyticsService.getChartColors(data) : 'rgb(110, 178, 230)',
+                        backgroundColor: options.mono === false ? ChartService.getChartColors(data) : 'rgb(110, 178, 230)',
                     }
                 ]
             },
@@ -46,7 +62,7 @@ ChartService = {
                 datasets: [
                     {
                         data: data.map(i => i.value),
-                        backgroundColor: options.mono === false ? AnalyticsService.getChartColors(data) : 'rgb(110, 178, 230)',
+                        backgroundColor: options.mono === false ? ChartService.getChartColors(data) : 'rgb(110, 178, 230)',
                     }
                 ]
             },
@@ -85,7 +101,7 @@ ChartService = {
                     {
                         label: label,
                         data: data.map(i => i.value),
-                        backgroundColor: AnalyticsService.getChartColors(data),
+                        backgroundColor: ChartService.getChartColors(data),
                         hoverOffset: 2
                     }
                 ]
@@ -109,7 +125,7 @@ ChartService = {
                     {
                         label: label,
                         data: data.map(i => i.value),
-                        backgroundColor: AnalyticsService.getChartColors(data),
+                        backgroundColor: ChartService.getChartColors(data),
                         hoverOffset: 2
                     }
                 ]
@@ -124,17 +140,19 @@ ChartService = {
             }
         };
     },
-    createLineConfig: (data, title, options = {}) => {
+    createLineConfig: (datasets, title, options = {}) => {
         return config = {
             type: 'line',
             data: {
-                labels: data.map(i => Convert.snakeToTitle(i.label)),
-                datasets: [
-                    {
-                        data: data.map(i => i.value),
-                        backgroundColor: options.mono === false ? AnalyticsService.getChartColors(data) : 'rgb(110, 178, 230)',
-                    }
-                ]
+                labels: datasets[0].data.map(i => Convert.snakeToTitle(i.label)),
+                datasets: datasets.map((dataset, i) => { 
+                    return {
+                        label: dataset.label,
+                        data: dataset.data.map(i => i.value),
+                        backgroundColor: options.mono === false || datasets.length > 1 ? ChartService.basicColors[i] : 'rgb(110, 178, 230)',
+                        borderColor: options.mono === false || datasets.length > 1 ? ChartService.basicColors[i] : 'rgb(110, 178, 230)',
+                    };
+                }),
             },
             options: {
                 indexAxis: 'x',
@@ -149,34 +167,18 @@ ChartService = {
                         text: title,
                     },
                     legend: {
-                        display: false
+                        display: options.showLegend === true,
                     },
                 }
             }
         };
     },
     getChartColors: (data) => {
-        let basicColors = [
-            'rgb(212, 44, 6)',
-            'rgb(20, 150, 20)',
-            'rgb(237, 157, 38)',
-            'rgb(65, 250, 228)',
-            'rgb(247, 230, 96)',
-            'rgb(147, 51, 212)',
-            'rgb(116, 237, 9)',
-            'rgb(242, 124, 126)',
-            'rgb(54, 52, 46)',
-            'rgb(124, 222, 242)',
-            'rgb(240, 134, 29)',
-            'rgb(65, 158, 104)',
-            'rgb(204, 80, 133)',
-            'rgb(105, 101, 230)',
-        ];
         let result = [];
         const randomBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
         for(let i = 0; i < data.length; i++) {
-            if(i < basicColors.length) {
-                result.push(basicColors[i]);
+            if(i < ChartService.basicColors.length) {
+                result.push(ChartService.basicColors[i]);
             } else {
                 result.push(randomBetween(0, 207), randomBetween(0, 207), randomBetween(0, 207));
             }

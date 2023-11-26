@@ -63,7 +63,7 @@ AnalyticsController = {
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
             };
-            const config = ChartService.createLineConfig(data, "Expenses Over Time", options);
+            const config = ChartService.createLineConfig([{label: '', data}], "Expenses Over Time", options);
             AnalyticsController.createAndSendImage(config, "expenses-over-time.png", res);
         } catch(e) {
             next(e);
@@ -99,8 +99,28 @@ AnalyticsController = {
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
             };
-            const config = ChartService.createLineConfig(data, "Earnings Over Time", options);
+            const config = ChartService.createLineConfig([{label: '', data}], "Earnings Over Time", options);
             AnalyticsController.createAndSendImage(config, "earnings-over-time.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getEarningsVsExpensesOverTime: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            const records = await MonthlyService.getAllData(db, filter);
+            const expenses = AnalyticsService.convertMonthlyDbToExpenseOverTime(records);
+            const earnings = AnalyticsService.convertMonthlyDbToEarningsOverTime(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+                showLegend: true,
+            };
+            const config = ChartService.createLineConfig([{label: "Earnings", data: earnings},{label: "Expenses", data: expenses}], "Earnings vs Expenses Over Time", options);
+            AnalyticsController.createAndSendImage(config, "earnings-vs-expenses-over-time.png", res);
         } catch(e) {
             next(e);
         }
