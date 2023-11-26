@@ -33,6 +33,8 @@ function setupRoutes() {
   app.get('/analytics/expenses-by-type', AnalyticsController.getExpensesByType);
   app.get('/analytics/expenses-per-month', AnalyticsController.getExpensesPerMonth);
   app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
+  app.get('/analytics/earnings-per-month', AnalyticsController.getEarningsPerMonth);
+  app.get('/analytics/earnings-over-time', AnalyticsController.getEarningsOverTime);
 }
 
 

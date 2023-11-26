@@ -69,6 +69,42 @@ AnalyticsController = {
             next(e);
         }
     },
+    getEarningsPerMonth: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            const records = await MonthlyService.getAllData(db, filter);
+            const data = AnalyticsService.convertMonthlyDbToEarningsPerMonth(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+            };
+            const config = ChartService.createVerticalBarChartConfig(data, "Earnings By Month", options);
+            AnalyticsController.createAndSendImage(config, "earnings-by-month.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getEarningsOverTime: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            const records = await MonthlyService.getAllData(db, filter);
+            const data = AnalyticsService.convertMonthlyDbToEarningsOverTime(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+            };
+            const config = ChartService.createLineConfig(data, "Earnings Over Time", options);
+            AnalyticsController.createAndSendImage(config, "earnings-over-time.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
 
 }
 

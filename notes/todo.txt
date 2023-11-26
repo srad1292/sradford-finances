@@ -1,7 +1,4 @@
 Derive start and end date for graphs and display either in title or in dataset label
 
 Earnings vs expenses - double bar
-
-Expenses sum over time - line 
-
-Earnings over time - line 
+Earnings vs expenses sum - double line
