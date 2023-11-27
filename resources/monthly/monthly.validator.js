@@ -1,17 +1,21 @@
 const Convert = require('../../utils/snake_and_camel');
+const DatabaseColumns = require("../../utils/database/database_columns.enum");
+const COLUMNS = DatabaseColumns.MonthlyColumns;
 
 MonthlyValidator = {
-    expenseColumns: ['mortgage', 'utilities','insurance', 
-    'car_payment', 'property_tax', 'taxes', 'groceries', 'entertainment', 'gifts', 
-    'eating_out', 'furniture', 'repairs', 'misc'],
-    earningsColumns: ['salary', 'bonus', 'tax_refund',],
-    updateColumns: ['id'],
-    getCreateColumns: () => { return ['finance_date', ...MonthlyValidator.expenseColumns, ...MonthlyValidator.earningsColumns]; },
+    expenseColumns: [
+        COLUMNS.Mortgage, COLUMNS.Utilities, COLUMNS.Insurance, 
+        COLUMNS.CarPayment, COLUMNS.PropertyTax, COLUMNS.Taxes, COLUMNS.Groceries, COLUMNS.Entertainment, 
+        COLUMNS.Gifts, COLUMNS.EatingOut, COLUMNS.Furniture, COLUMNS.Repairs, COLUMNS.Misc
+    ],
+    earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund],
+    getUpdateColumns: () => [COLUMNS.Id, ...MonthlyValidator.getCreateColumns()],
+    getCreateColumns: () => { return [COLUMNS.FinanceDate, ...MonthlyValidator.expenseColumns, ...MonthlyValidator.earningsColumns]; },
     validateCreateData: (body) => {
         let errors = [];
         MonthlyValidator.getCreateColumns().forEach(c => {
             let key = Convert.snakeToCamel(c);
-            if(c === 'finance_date') {
+            if(c === COLUMNS.FinanceDate) {
                 if(body[key] === undefined) {
                     errors.push({property: key, error: `Is a required field`});
                 } else if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(body[key]) === false) {

@@ -23,6 +23,21 @@ MonthlyDao = {
             throw new DatabaseException("Error creating monthly data: " + e, 500);
         }
     },
+    updateMonthlyData: async(db, body) => {
+        let dbData = MonthlyDao.getUpdateData(body);
+        let placeholders = dbData.placeholders;
+        let values = dbData.values;
+        let sql = `UPDATE ${DatabaseTable.monthly}\nSET ${placeholders}\nWHERE ${DatabaseColumns.MonthlyColumns.id} = ?;`;
+        
+        console.log(dbData);
+        try {
+            // const runResult = await db.run(sql, values);
+            // return {id: runResult.lastID, ...body};
+            return {id: 1000, ...body};
+        } catch (e) {
+            throw new DatabaseException("Error updating monthly data: " + e, 500);
+        }
+    },
     getMonthlyDataById: async (db, id) => {
         let sql = `SELECT * FROM ${DatabaseTable.monthly} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
         try {
@@ -92,6 +107,24 @@ MonthlyDao = {
         });
     
         return {columns, placeholders, values};
+    },
+    getUpdateData: (body) => {
+        let placeholders = MonthlyValidator.getCreateColumns().join(" = ?,\n");
+        placeholders = `${placeholders} = ?,`; 
+        let values = MonthlyValidator.getCreateColumns().map(c => {
+            let key = Convert.snakeToCamel(c);
+            if(c === 'finance_date') {
+                return body[key];
+            } else {
+                if(body[key] === undefined) {
+                    return 0;
+                }
+                return Money.moneyToCents(body[key]);
+            }
+        });
+        values.push(body[Convert.snakeToCamel(DatabaseColumns.MonthlyColumns.Id)]);
+    
+        return {placeholders, values};
     },
     
 }

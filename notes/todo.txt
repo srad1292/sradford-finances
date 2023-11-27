@@ -1,4 +1,29 @@
 Derive start and end date for graphs and display either in title or in dataset label
 
-Earnings vs expenses - double bar
-Earnings vs expenses sum - double line
+Endpoint to update monthly record
+
+
+--- Investments --- 
+* I had originally planned this to be yearly data when I made the excel template 
+  but I am wondering if adding monthly records would be useful
+  I could still combine records by year for certain graphs and data, but I'd also have monthly data if it was useful 
+
+
+Endpoints:
+
+Create record
+Get all records
+Get single record
+Delete record
+Update record
+Create excel sheet
+Charts: 
+  Growth by month - Line 
+  Growth by year - Line
+  Breakdown by month - Stacked bar (option to show initial or not)
+  Breakdown by year - Stacked bar (option to show initial or not)
+  Contributions by month - Bar 
+  Contributions by year - Bar 
+  Gains by month - Bar
+  Gains by Year - Bar
+  Contributions(sum) vs gains(sum) over time - double line

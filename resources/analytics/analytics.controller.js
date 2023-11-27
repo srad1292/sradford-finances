@@ -9,7 +9,7 @@ AnalyticsController = {
     createAndSendImage: async(config, fileTitle, res) => {
         let chartImg = await ChartService.createImage(config);
         chartImg = chartImg.replace("data:image/png;base64,", "");
-        const filePath = path.join(__dirname, fileTitle);
+        const filePath = path.join(__dirname, 'img', fileTitle);
         const buffer = Buffer.from(chartImg, 'base64');
         fs.writeFileSync(filePath, buffer);
         res.status(200).sendFile(filePath);
@@ -101,6 +101,26 @@ AnalyticsController = {
             };
             const config = ChartService.createLineConfig([{label: '', data}], "Earnings Over Time", options);
             AnalyticsController.createAndSendImage(config, "earnings-over-time.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getEarningsVsExpensesByMonth: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            const records = await MonthlyService.getAllData(db, filter);
+            const expenses = AnalyticsService.convertMonthlyDbToEarningsPerMonth(records);
+            const earnings = AnalyticsService.convertMonthlyDbToExpensePerMonth(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+                showLegend: true,
+            };
+            const config = ChartService.createDoubleVerticalBarChartConfig([{label: "Earnings", data: earnings},{label: "Expenses", data: expenses}], "Earnings vs Expenses Per Month", options);
+            AnalyticsController.createAndSendImage(config, "earnings-vs-expenses-per-month.png", res);
         } catch(e) {
             next(e);
         }

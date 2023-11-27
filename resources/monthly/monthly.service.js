@@ -6,6 +6,9 @@ const Money = require('../../utils/money');
 
 
 MonthlyService = {
+    updateMonthlyData: async(db, body) => {
+        return await MonthlyDao.updateMonthlyData(db, body);
+    },
     getMonthlyDataById: async(db, id) => {
         return await MonthlyDao.getMonthlyDataById(db, id);
     },

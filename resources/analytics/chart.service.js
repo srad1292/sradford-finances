@@ -3,18 +3,18 @@ const Convert = require('../../utils/snake_and_camel');
 
 ChartService = {
     basicColors: [
-        'rgb(20, 150, 20)',
-        'rgb(212, 44, 6)',
+        'rgb(65, 158, 104)',
+        'rgb(242, 124, 126)',
         'rgb(65, 250, 228)',
         'rgb(237, 157, 38)',
         'rgb(147, 51, 212)',
         'rgb(247, 230, 96)',
         'rgb(116, 237, 9)',
-        'rgb(242, 124, 126)',
+        'rgb(212, 44, 6)',
         'rgb(54, 52, 46)',
         'rgb(124, 222, 242)',
         'rgb(240, 134, 29)',
-        'rgb(65, 158, 104)',
+        'rgb(20, 150, 20)',
         'rgb(204, 80, 133)',
         'rgb(105, 101, 230)',
     ],
@@ -49,6 +49,39 @@ ChartService = {
                     },
                     legend: {
                         display: false
+                    },
+                }
+            }
+        };
+    },
+    createDoubleVerticalBarChartConfig: (datasets, title, options) => {
+        return config = {
+            type: 'bar',
+            data: {
+                labels: datasets[0].data.map(i => Convert.snakeToTitle(i.label)),
+                datasets: datasets.map((dataset, i) => { 
+                    return {
+                        label: dataset.label,
+                        data: dataset.data.map(i => i.value),
+                        backgroundColor: ChartService.basicColors[i],
+                        borderColor: ChartService.basicColors[i],
+                    };
+                }),
+            },
+            options: {
+                indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                    },
+                    legend: {
+                        display: options.showLegend === true,
                     },
                 }
             }

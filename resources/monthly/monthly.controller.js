@@ -23,6 +23,21 @@ MonthlyController = {
             next(e);
         }
     },
+    createMonthlyData: async (req, res, next) => {
+        try {
+            const bodyErrors = MonthlyValidator.validateCreateData(req.body);
+            if(bodyErrors.length > 0) {
+                console.log(bodyErrors);
+                throw new APIException("Invalid request body", bodyErrors, 400);
+            }
+            const db = await Database.getDb();
+            const record = await MonthlyDao.updateMonthlyData(db, req.body);
+            console.log("Good to send 200");
+            res.status(201).send(record);
+        } catch(e) {
+            next(e);
+        }
+    },
     getMonthlyDataById: async (req, res, next) => {
         try {
             const db = await Database.getDb();
