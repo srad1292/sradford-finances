@@ -3,17 +3,24 @@ function moneyToCents(money) {
 }
 
 function centsToMoney(cents) {
+    let isNegative = cents < 0;
+    if(isNegative) {
+        cents = Math.abs(cents);
+    }
     let str = `${cents}`;
+    let moneyStr = '';
     if(cents === 0) {
         return 0;
     }
     else if(str.length === 1) {
-        return parseFloat(`0.0${str}`);
+        moneyStr = `0.0${str}`;
     } else if(str.length === 2) {
-        return parseFloat(`0.${str}`);
+        moneyStr = `0.${str}`;
     } else {
-        return parseFloat(str.slice(0, -2) + '.' + str.slice(-2));
+        moneyStr = str.slice(0, -2) + '.' + str.slice(-2);
     }
+
+    return isNegative ? parseFloat(`-${moneyStr}`) : parseFloat(moneyStr);
 }
 
 module.exports = {moneyToCents, centsToMoney};

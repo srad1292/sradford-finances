@@ -5,6 +5,7 @@ const Database = require('./db');
 const APIException = require('./errors/api_exception');
 const MonthlyController = require("./resources/monthly/monthly.controller");
 const AnalyticsController = require("./resources/analytics/analytics.controller");
+const InvestmentsController = require("./resources/investments/investments.controller");
 
 const app = express();
 const port = 3001;
@@ -24,13 +25,6 @@ function setupRoutes() {
     response.json({ info: 'sradford finances api' });
   });
 
-  app.post('/monthly-data', MonthlyController.createMonthlyData);
-  app.put('/monthly-data', MonthlyController.updateMonthlyData);
-  app.get('/monthly-data', MonthlyController.getAllMonthlyData);
-  app.get('/monthly-data/spreadsheet', MonthlyController.getAllMonthlyDataAsSpreadsheet);
-  app.get('/monthly-data/:id', MonthlyController.getMonthlyDataById);
-  app.delete('/monthly-data/:id', MonthlyController.deleteMonthlyRecord);
-
   app.get('/analytics/earnings-per-month', AnalyticsController.getEarningsPerMonth);
   app.get('/analytics/earnings-over-time', AnalyticsController.getEarningsOverTime);
   app.get('/analytics/earnings-vs-expenses-over-time', AnalyticsController.getEarningsVsExpensesOverTime);
@@ -38,6 +32,17 @@ function setupRoutes() {
   app.get('/analytics/expenses-by-type', AnalyticsController.getExpensesByType);
   app.get('/analytics/expenses-per-month', AnalyticsController.getExpensesPerMonth);
   app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
+
+  app.post('/investments', InvestmentsController.createInvestmentsData);
+
+  app.post('/monthly-data', MonthlyController.createMonthlyData);
+  app.put('/monthly-data', MonthlyController.updateMonthlyData);
+  app.get('/monthly-data', MonthlyController.getAllMonthlyData);
+  app.get('/monthly-data/spreadsheet', MonthlyController.getAllMonthlyDataAsSpreadsheet);
+  app.get('/monthly-data/:id', MonthlyController.getMonthlyDataById);
+  app.delete('/monthly-data/:id', MonthlyController.deleteMonthlyRecord);
+
+
   
 }
 
