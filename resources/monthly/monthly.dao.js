@@ -27,14 +27,19 @@ MonthlyDao = {
         let dbData = MonthlyDao.getUpdateData(body);
         let placeholders = dbData.placeholders;
         let values = dbData.values;
-        let sql = `UPDATE ${DatabaseTable.monthly}\nSET ${placeholders}\nWHERE ${DatabaseColumns.MonthlyColumns.id} = ?;`;
+        let sql = `UPDATE ${DatabaseTable.monthly}\nSET ${placeholders}\nWHERE ${DatabaseColumns.MonthlyColumns.Id} = ?`;
         
-        console.log(dbData);
         try {
-            // const runResult = await db.run(sql, values);
-            // return {id: runResult.lastID, ...body};
-            return {id: 1000, ...body};
+            const result = await db.run(sql, values);
+            if(result === null || result === undefined || result.changes === 0) {
+                throw new APIException("No record found with ID: " + body.id, [], 404);
+            }
+            return {id: body.id, ...body};
+            // return {id: 1000, ...body};
         } catch (e) {
+            if(e instanceof APIException) {
+                throw(e);
+            }
             throw new DatabaseException("Error updating monthly data: " + e, 500);
         }
     },
@@ -110,7 +115,7 @@ MonthlyDao = {
     },
     getUpdateData: (body) => {
         let placeholders = MonthlyValidator.getCreateColumns().join(" = ?,\n");
-        placeholders = `${placeholders} = ?,`; 
+        placeholders = `${placeholders} = ?`; 
         let values = MonthlyValidator.getCreateColumns().map(c => {
             let key = Convert.snakeToCamel(c);
             if(c === 'finance_date') {

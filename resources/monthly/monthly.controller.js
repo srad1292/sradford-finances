@@ -23,7 +23,7 @@ MonthlyController = {
             next(e);
         }
     },
-    createMonthlyData: async (req, res, next) => {
+    updateMonthlyData: async (req, res, next) => {
         try {
             const bodyErrors = MonthlyValidator.validateCreateData(req.body);
             if(bodyErrors.length > 0) {
