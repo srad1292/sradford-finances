@@ -1,7 +1,10 @@
 Derive start and end date for graphs and display either in title or in dataset label
 
-Endpoint to update monthly record
-
+- Prod db 
+  - Run commands to create tables
+  - Different npm run command
+    - Use env to get path
+    - Connect to path from db instead of local test db
 
 --- Investments --- 
 * I had originally planned this to be yearly data when I made the excel template 

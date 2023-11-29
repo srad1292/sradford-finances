@@ -19,3 +19,12 @@ CREATE TABLE IF NOT EXISTS monthly(
     tax_refund INTEGER DEFAULT 0 
 );
 
+CREATE TABLE IF NOT EXISTS investments(
+    id INTEGER PRIMARY KEY,
+    record_date TEXT NOT NULL,
+    initial INTEGER DEFAULT 0,
+    contributions INTEGER DEFAULT 0,
+    gains INTEGER DEFAULT 0,
+    final INTEGER DEFAULT 0
+);
+

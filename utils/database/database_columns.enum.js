@@ -19,5 +19,14 @@ const MonthlyColumns = {
     TaxRefund: 'tax_refund',
 }
 
+const InvestmentsColumns = {
+    Id: 'id',
+    RecordDate: 'record_date',
+    Initial: 'initial',
+    Contributions: 'contributions',
+    Gains: 'gains',
+    Final: 'final',
+}
 
-module.exports = {MonthlyColumns};
+
+module.exports = {MonthlyColumns, InvestmentsColumns};
