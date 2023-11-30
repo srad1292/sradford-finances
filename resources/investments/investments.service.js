@@ -10,6 +10,10 @@ const InvestmentsService = {
     getRecordById: async(db, id) => {
         return await InvestmentsDao.getRecordById(db, id);
     },
+    getAllRecords: async(db, filter) => {
+        const records = await InvestmentsDao.getAllRecords(db, filter);
+        return records;
+    },
     // Helpers
     calculateFinal: (body) => {
         const initial = Money.moneyToCents(body[COLUMNS.Initial]);

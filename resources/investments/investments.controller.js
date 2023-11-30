@@ -33,6 +33,22 @@ InvestmentsController = {
             next(e);
         }
     },
+    getAllRecords: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                sort: req.query.sort,
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            console.log(filter);
+            const records = await InvestmentsService.getAllRecords(db, filter);
+            const result = records.map(r => InvestmentsService.convertRecordToJson(r));
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
 };
 
 module.exports = InvestmentsController;

@@ -38,6 +38,26 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting monthly data with id " + id + ": " + e, 500);
         }
     },
+    getAllRecords: async (db, filters = {}) => {
+        let select = `SELECT * FROM ${DatabaseTable.investments}`;
+        let where = '';
+        if(!!filters.startDate && !!filters.endDate) {
+            where = `WHERE ${COLUMNS.RecordDate} >= '${filters.startDate}' AND ${COLUMNS.RecordDate} <= '${filters.endDate}'`;
+        } else if(!!filters.startDate) {
+            where = `WHERE ${COLUMNS.RecordDate} >= '${filters.startDate}'`;
+        } else if(!!filters.endDate) {
+            where = `WHERE ${COLUMNS.RecordDate} <= '${filters.endDate}'`;
+        }
+        let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
+        let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
+        console.log(sql);
+        try {
+            let data = await db.all(sql);
+            return data;
+        } catch(e) {
+            throw new DatabaseException("Error getting investment data: " + e, 500);
+        }
+    },
     // DAO helpers
     getCreateData: (body) => {
         let columns = "(" + InvestmentsValidator.getCreateColumns().join(",") + ")";
