@@ -49,6 +49,22 @@ InvestmentsController = {
             next(e);
         }
     },
+    updateRecord: async (req, res, next) => {
+        try {
+            const bodyErrors = InvestmentsValidator.validateCreateData(req.body);
+            if(bodyErrors.length > 0) {
+                console.log(bodyErrors);
+                throw new APIException("Invalid request body", bodyErrors, 400);
+            }
+            const body = InvestmentsService.calculateFinal(req.body);
+            const db = await Database.getDb();
+            const record = await InvestmentsService.updateRecord(db, req.body);
+            console.log("Good to send 200");
+            res.status(200).send(record);
+        } catch(e) {
+            next(e);
+        }
+    },
     deleteRecord: async (req, res, next) => {
         try {
             const db = await Database.getDb();

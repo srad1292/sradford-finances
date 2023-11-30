@@ -14,6 +14,9 @@ const InvestmentsService = {
         const records = await InvestmentsDao.getAllRecords(db, filter);
         return records;
     },
+    updateRecord: async(db, body) => {
+        return await InvestmentsDao.updateRecord(db, body);
+    },
     deleteRecord: async (db, id) => {
         return await InvestmentsDao.deleteRecord(db, id);
     },

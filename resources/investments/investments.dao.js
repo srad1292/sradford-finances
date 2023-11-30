@@ -58,6 +58,26 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting investment data: " + e, 500);
         }
     },
+    updateRecord: async(db, body) => {
+        let dbData = InvestmentsDao.getUpdateData(body);
+        let placeholders = dbData.placeholders;
+        let values = dbData.values;
+        let sql = `UPDATE ${DatabaseTable.investments}\nSET ${placeholders}\nWHERE ${COLUMNS.Id} = ?`;
+        
+        try {
+            const result = await db.run(sql, values);
+            if(result === null || result === undefined || result.changes === 0) {
+                throw new APIException("No record found with ID: " + body.id, [], 404);
+            }
+            return {id: body.id, ...body};
+            // return {id: 1000, ...body};
+        } catch (e) {
+            if(e instanceof APIException) {
+                throw(e);
+            }
+            throw new DatabaseException("Error updating investment record: " + e, 500);
+        }
+    },
     deleteRecord: async (db, id) => {
         let sql = `DELETE FROM ${DatabaseTable.investments} WHERE ${COLUMNS.Id} = ${id};`
         try {
@@ -90,6 +110,24 @@ const InvestmentsDao = {
         });
     
         return {columns, placeholders, values};
+    },
+    getUpdateData: (body) => {
+        let placeholders = InvestmentsValidator.getCreateColumns().join(" = ?,\n");
+        placeholders = `${placeholders} = ?`; 
+        let values = InvestmentsValidator.getCreateColumns().map(c => {
+            let key = Convert.snakeToCamel(c);
+            if(c === COLUMNS.RecordDate) {
+                return body[key];
+            } else {
+                if(body[key] === undefined) {
+                    return 0;
+                }
+                return Money.moneyToCents(body[key]);
+            }
+        });
+        values.push(body[Convert.snakeToCamel(COLUMNS.Id)]);
+    
+        return {placeholders, values};
     },
 };
 

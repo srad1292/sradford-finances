@@ -33,7 +33,7 @@ MonthlyController = {
             const db = await Database.getDb();
             const record = await MonthlyDao.updateMonthlyData(db, req.body);
             console.log("Good to send 200");
-            res.status(201).send(record);
+            res.status(200).send(record);
         } catch(e) {
             next(e);
         }

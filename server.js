@@ -34,9 +34,10 @@ function setupRoutes() {
   app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
 
   app.post('/investments', InvestmentsController.createInvestmentsData);
+  app.get('/investments', InvestmentsController.getAllRecords);
+  app.put('/investments', InvestmentsController.updateRecord);
   app.get('/investments/:id', InvestmentsController.getRecordById);
   app.delete('/investments/:id', InvestmentsController.deleteRecord);
-  app.get('/investments', InvestmentsController.getAllRecords);
 
   app.post('/monthly-data', MonthlyController.createMonthlyData);
   app.put('/monthly-data', MonthlyController.updateMonthlyData);

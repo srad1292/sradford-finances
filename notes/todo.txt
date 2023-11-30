@@ -16,7 +16,6 @@ Endpoints:
 
 Get all records by year
 Get single year
-Delete record
 Update record
 Create excel sheet
 Charts: 
