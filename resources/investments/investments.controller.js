@@ -49,6 +49,15 @@ InvestmentsController = {
             next(e);
         }
     },
+    deleteRecord: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const result = await InvestmentsService.deleteRecord(db, req.params['id']);
+            res.status(200).send({status: 'success'});
+        } catch(e) {
+            next(e);
+        }
+    }
 };
 
 module.exports = InvestmentsController;

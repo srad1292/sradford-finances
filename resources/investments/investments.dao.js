@@ -58,6 +58,21 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting investment data: " + e, 500);
         }
     },
+    deleteRecord: async (db, id) => {
+        let sql = `DELETE FROM ${DatabaseTable.investments} WHERE ${COLUMNS.Id} = ${id};`
+        try {
+            let result = await db.run(sql);
+            if(result === null || result === undefined || result.changes === 0) {
+                throw new APIException("No record found with ID: " + id, [], 404);
+            }
+            return result;
+        } catch(e) {
+            if(e instanceof APIException) {
+                throw(e);
+            }
+            throw new DatabaseException("Error getting investment record with id " + id + ": " + e, 500);
+        }
+    },
     // DAO helpers
     getCreateData: (body) => {
         let columns = "(" + InvestmentsValidator.getCreateColumns().join(",") + ")";

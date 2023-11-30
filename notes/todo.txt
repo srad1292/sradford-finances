@@ -14,7 +14,6 @@ Derive start and end date for graphs and display either in title or in dataset l
 
 Endpoints:
 
-Get all records by month
 Get all records by year
 Get single year
 Delete record

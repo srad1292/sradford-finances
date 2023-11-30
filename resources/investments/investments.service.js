@@ -14,6 +14,9 @@ const InvestmentsService = {
         const records = await InvestmentsDao.getAllRecords(db, filter);
         return records;
     },
+    deleteRecord: async (db, id) => {
+        return await InvestmentsDao.deleteRecord(db, id);
+    },
     // Helpers
     calculateFinal: (body) => {
         const initial = Money.moneyToCents(body[COLUMNS.Initial]);

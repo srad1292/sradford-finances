@@ -35,6 +35,7 @@ function setupRoutes() {
 
   app.post('/investments', InvestmentsController.createInvestmentsData);
   app.get('/investments/:id', InvestmentsController.getRecordById);
+  app.delete('/investments/:id', InvestmentsController.deleteRecord);
   app.get('/investments', InvestmentsController.getAllRecords);
 
   app.post('/monthly-data', MonthlyController.createMonthlyData);
