@@ -23,11 +23,26 @@ const InvestmentsDao = {
             throw new DatabaseException("Error creating investments data: " + e, 500);
         }
     },
+    getRecordById: async (db, id) => {
+        let sql = `SELECT * FROM ${DatabaseTable.investments} WHERE ${DatabaseColumns.InvestmentsColumns.Id} = ${id};`
+        try {
+            let data = await db.get(sql);
+            if(data === null || data === undefined) {
+                throw new APIException("No record found with ID: " + id, [], 404);
+            }
+            return data;
+        } catch(e) {
+            if(e instanceof APIException) {
+                throw(e);
+            }
+            throw new DatabaseException("Error getting monthly data with id " + id + ": " + e, 500);
+        }
+    },
     // DAO helpers
     getCreateData: (body) => {
-        let columns = "(" + InvestmentsValidator.createColumns.join(",") + ")";
-        let placeholders = "(" + InvestmentsValidator.createColumns.map(c => '?').join(',') + ")";
-        let values = InvestmentsValidator.createColumns.map(c => {
+        let columns = "(" + InvestmentsValidator.getCreateColumns().join(",") + ")";
+        let placeholders = "(" + InvestmentsValidator.getCreateColumns().map(c => '?').join(',') + ")";
+        let values = InvestmentsValidator.getCreateColumns().map(c => {
             let key = Convert.snakeToCamel(c);
             if(c === COLUMNS.RecordDate) {
                 return body[key];

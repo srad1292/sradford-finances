@@ -22,6 +22,17 @@ InvestmentsController = {
             next(e);
         }
     },
+    getRecordById: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const id = parseInt(await req.params['id']);
+            const record = await InvestmentsService.getRecordById(db, id);
+            const result = InvestmentsService.convertRecordToJson(record);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
 };
 
 module.exports = InvestmentsController;

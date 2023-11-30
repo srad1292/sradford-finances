@@ -14,9 +14,9 @@ Derive start and end date for graphs and display either in title or in dataset l
 
 Endpoints:
 
-Create record
-Get all records
-Get single record
+Get all records by month
+Get all records by year
+Get single year
 Delete record
 Update record
 Create excel sheet

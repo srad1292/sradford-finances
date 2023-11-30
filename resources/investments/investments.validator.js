@@ -4,11 +4,14 @@ const COLUMNS = DatabaseColumns.InvestmentsColumns;
 
 InvestmentsValidator = {
     updateColumns: [COLUMNS.Id],
-    createColumns: [COLUMNS.RecordDate, COLUMNS.Initial, COLUMNS.Contributions, COLUMNS.Gains],
+    givenColumns: [COLUMNS.RecordDate, COLUMNS.Initial, COLUMNS.Contributions, COLUMNS.Gains],
     derivedColumns: [COLUMNS.Final],
+    getCreateColumns: () => {
+        return [...InvestmentsValidator.givenColumns, ...InvestmentsValidator.derivedColumns];
+    },
     validateCreateData: (body) => {
         let errors = [];
-        InvestmentsValidator.createColumns.forEach(c => {
+        InvestmentsValidator.givenColumns.forEach(c => {
             let key = Convert.snakeToCamel(c);
             if(c === COLUMNS.RecordDate) {
                 if(body[key] === undefined) {
