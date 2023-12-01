@@ -49,6 +49,17 @@ InvestmentsController = {
             next(e);
         }
     },
+    getByYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            let filter = {};
+            const records = await InvestmentsService.getByYear(db, filter);
+            const result = records.map(r => InvestmentsService.convertYearRecordToJson(r));
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     updateRecord: async (req, res, next) => {
         try {
             const bodyErrors = InvestmentsValidator.validateCreateData(req.body);
@@ -58,7 +69,7 @@ InvestmentsController = {
             }
             const body = InvestmentsService.calculateFinal(req.body);
             const db = await Database.getDb();
-            const record = await InvestmentsService.updateRecord(db, req.body);
+            const record = await InvestmentsService.updateRecord(db, body);
             console.log("Good to send 200");
             res.status(200).send(record);
         } catch(e) {

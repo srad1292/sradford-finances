@@ -2,6 +2,7 @@ const InvestmentsValidator = require('./investments.validator');
 const DatabaseTable = require('../../utils/database/database_table.enum');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const COLUMNS = DatabaseColumns.InvestmentsColumns;
+const YearColumns = DatabaseColumns.InvestmentsYearColumns;
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
 const APIException = require('../../errors/api_exception');
@@ -57,6 +58,20 @@ const InvestmentsDao = {
         } catch(e) {
             throw new DatabaseException("Error getting investment data: " + e, 500);
         }
+    },
+    getByYear: async(db, filter) => {
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions}, ${YearColumns.TotalGains}, FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) AS ${YearColumns.InitialValue}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${YearColumns.FinalValue}
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, ${COLUMNS.Initial}, ${COLUMNS.Id}, ${COLUMNS.RecordDate}
+          FROM ${DatabaseTable.investments}
+          GROUP BY ${YearColumns.Year}
+          HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
+        ) AS subquery
+        ORDER BY ${YearColumns.Year};`
+        
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
     },
     updateRecord: async(db, body) => {
         let dbData = InvestmentsDao.getUpdateData(body);

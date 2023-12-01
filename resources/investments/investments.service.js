@@ -3,7 +3,7 @@ const Money = require('../../utils/money');
 const Convert = require('../../utils/snake_and_camel');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const COLUMNS = DatabaseColumns.InvestmentsColumns;
-
+const YearColumns = DatabaseColumns.InvestmentsYearColumns;
 
 const InvestmentsService = {
     // Endpoint Calls
@@ -12,6 +12,10 @@ const InvestmentsService = {
     },
     getAllRecords: async(db, filter) => {
         const records = await InvestmentsDao.getAllRecords(db, filter);
+        return records;
+    },
+    getByYear: async(db, filter) => {
+        const records = await InvestmentsDao.getByYear(db, filter);
         return records;
     },
     updateRecord: async(db, body) => {
@@ -41,6 +45,18 @@ const InvestmentsService = {
         });
         return rowAsJs;
     },
+    convertYearRecordToJson: (data) => {
+        let rowAsJs = {};
+        Object.entries(data).forEach(entry => {
+            let [key, value] = entry;
+            if(key === YearColumns.Year) {
+                rowAsJs[Convert.snakeToCamel(key)] = value;
+            } else {
+                rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);
+            }
+        });
+        return rowAsJs;
+    }
     
 }
 

@@ -28,5 +28,14 @@ const InvestmentsColumns = {
     Final: 'final',
 }
 
+// Result table from query, not a persistent table
+const InvestmentsYearColumns = {
+    Year: 'year',
+    InitialValue: 'initial_value',
+    TotalContributions: 'total_contributions',
+    TotalGains: 'total_gains',
+    FinalValue: 'final_value',
+}
 
-module.exports = {MonthlyColumns, InvestmentsColumns};
+
+module.exports = {MonthlyColumns, InvestmentsColumns, InvestmentsYearColumns};

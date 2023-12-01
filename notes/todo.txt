@@ -16,7 +16,6 @@ Endpoints:
 
 Get all records by year
 Get single year
-Update record
 Create excel sheet
 Charts: 
   Growth by month - Line 
