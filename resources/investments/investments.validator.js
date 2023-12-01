@@ -4,7 +4,7 @@ const COLUMNS = DatabaseColumns.InvestmentsColumns;
 
 InvestmentsValidator = {
     updateColumns: [COLUMNS.Id],
-    givenColumns: [COLUMNS.RecordDate, COLUMNS.Initial, COLUMNS.Contributions, COLUMNS.Gains],
+    givenColumns: [COLUMNS.RecordDate, COLUMNS.Initial, COLUMNS.Contributions, COLUMNS.Gains, COLUMNS.Withdrawals],
     derivedColumns: [COLUMNS.Final],
     getCreateColumns: () => {
         return [...InvestmentsValidator.givenColumns, ...InvestmentsValidator.derivedColumns];
@@ -27,6 +27,8 @@ InvestmentsValidator = {
                     return;
                 } else if(typeof(body[key]) !== 'number') {
                     errors.push({property: key, error: `${key} should be a number but is ${typeof(body[key])}`});
+                } else if((key === COLUMNS.Contributions || key === COLUMNS.Withdrawals) && body[key] < 0) {
+                    errors.push({property: key, error: `${key} should be positive`});
                 }
                 return;
             }

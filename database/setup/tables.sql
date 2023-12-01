@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS investments(
     initial INTEGER DEFAULT 0,
     contributions INTEGER DEFAULT 0,
     gains INTEGER DEFAULT 0,
+    withdrawals INTEGER DEFAULT 0,
     final INTEGER DEFAULT 0
 );
 

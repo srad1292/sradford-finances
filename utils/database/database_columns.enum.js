@@ -25,6 +25,7 @@ const InvestmentsColumns = {
     Initial: 'initial',
     Contributions: 'contributions',
     Gains: 'gains',
+    Withdrawals: 'withdrawals',
     Final: 'final',
 }
 
@@ -34,6 +35,7 @@ const InvestmentsYearColumns = {
     InitialValue: 'initial_value',
     TotalContributions: 'total_contributions',
     TotalGains: 'total_gains',
+    TotalWithdrawals: 'total_withdrawals',
     FinalValue: 'final_value',
 }
 

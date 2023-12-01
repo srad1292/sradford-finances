@@ -60,9 +60,9 @@ const InvestmentsDao = {
         }
     },
     getByYear: async(db, filter) => {
-        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions}, ${YearColumns.TotalGains}, FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) AS ${YearColumns.InitialValue}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${YearColumns.FinalValue}
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions}, ${YearColumns.TotalGains}, ${YearColumns.TotalWithdrawals}, FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) AS ${YearColumns.InitialValue}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} - ${YearColumns.TotalWithdrawals} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${YearColumns.FinalValue}
         FROM (
-          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, ${COLUMNS.Initial}, ${COLUMNS.Id}, ${COLUMNS.RecordDate}
+          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, SUM(${COLUMNS.Withdrawals}) as ${YearColumns.TotalWithdrawals}, ${COLUMNS.Initial}, ${COLUMNS.Id}, ${COLUMNS.RecordDate}
           FROM ${DatabaseTable.investments}
           GROUP BY ${YearColumns.Year}
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})

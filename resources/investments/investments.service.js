@@ -29,7 +29,8 @@ const InvestmentsService = {
         const initial = Money.moneyToCents(body[COLUMNS.Initial]);
         const contributions = Money.moneyToCents(body[COLUMNS.Contributions]);
         const gains = Money.moneyToCents(body[COLUMNS.Gains]);
-        const final = Money.centsToMoney(initial+contributions+gains);
+        const withdrawals = Money.moneyToCents(body[COLUMNS.Withdrawals]);
+        const final = Money.centsToMoney(initial+contributions+gains-withdrawals);
         body[COLUMNS.Final] = final;
         return body;
     },

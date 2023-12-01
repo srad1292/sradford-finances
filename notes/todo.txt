@@ -6,16 +6,10 @@ Derive start and end date for graphs and display either in title or in dataset l
     - Use env to get path
     - Connect to path from db instead of local test db
 
---- Investments --- 
-* I had originally planned this to be yearly data when I made the excel template 
-  but I am wondering if adding monthly records would be useful
-  I could still combine records by year for certain graphs and data, but I'd also have monthly data if it was useful 
-
+* Investments: 
 
 Endpoints:
 
-Get all records by year
-Get single year
 Create excel sheet
 Charts: 
   Growth by month - Line 
