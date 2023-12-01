@@ -52,7 +52,10 @@ InvestmentsController = {
     getByYear: async(req, res, next) => {
         try {
             const db = await Database.getDb();
-            let filter = {};
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
             const records = await InvestmentsService.getByYear(db, filter);
             const result = records.map(r => InvestmentsService.convertYearRecordToJson(r));
             res.status(200).send(result);

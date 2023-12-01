@@ -41,14 +41,7 @@ const InvestmentsDao = {
     },
     getAllRecords: async (db, filters = {}) => {
         let select = `SELECT * FROM ${DatabaseTable.investments}`;
-        let where = '';
-        if(!!filters.startDate && !!filters.endDate) {
-            where = `WHERE ${COLUMNS.RecordDate} >= '${filters.startDate}' AND ${COLUMNS.RecordDate} <= '${filters.endDate}'`;
-        } else if(!!filters.startDate) {
-            where = `WHERE ${COLUMNS.RecordDate} >= '${filters.startDate}'`;
-        } else if(!!filters.endDate) {
-            where = `WHERE ${COLUMNS.RecordDate} <= '${filters.endDate}'`;
-        }
+        let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
         console.log(sql);
@@ -59,16 +52,17 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting investment data: " + e, 500);
         }
     },
-    getByYear: async(db, filter) => {
+    getByYear: async(db, filters = {}) => {
         let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions}, ${YearColumns.TotalGains}, ${YearColumns.TotalWithdrawals}, FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) AS ${YearColumns.InitialValue}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} - ${YearColumns.TotalWithdrawals} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${YearColumns.FinalValue}
         FROM (
           SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, SUM(${COLUMNS.Withdrawals}) as ${YearColumns.TotalWithdrawals}, ${COLUMNS.Initial}, ${COLUMNS.Id}, ${COLUMNS.RecordDate}
           FROM ${DatabaseTable.investments}
+          ${InvestmentsDao.buildWhereClauseWithYears(filters)}
           GROUP BY ${YearColumns.Year}
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        
+        console.log(sql);
         let data = await db.all(sql);
         // console.log(data);
         return data;
@@ -143,6 +137,28 @@ const InvestmentsDao = {
         values.push(body[Convert.snakeToCamel(COLUMNS.Id)]);
     
         return {placeholders, values};
+    },
+    buildWhereClauseWithDates: (filters = {}) => {
+        let where = '';
+        if(!!filters.startDate && !!filters.endDate) {
+            where = `WHERE ${COLUMNS.RecordDate} >= '${filters.startDate}' AND ${COLUMNS.RecordDate} <= '${filters.endDate}'`;
+        } else if(!!filters.startDate) {
+            where = `WHERE ${COLUMNS.RecordDate} >= '${filters.startDate}'`;
+        } else if(!!filters.endDate) {
+            where = `WHERE ${COLUMNS.RecordDate} <= '${filters.endDate}'`;
+        }
+        return where;
+    },
+    buildWhereClauseWithYears: (filters = {}) => {
+        let where = '';
+        if(!!filters.from && !!filters.to) {
+            where = `WHERE ${YearColumns.Year} >= '${filters.from}' AND ${YearColumns.Year} <= '${filters.to}'`;
+        } else if(!!filters.from) {
+            where = `WHERE ${YearColumns.Year} >= '${filters.from}'`;
+        } else if(!!filters.to) {
+            where = `WHERE ${YearColumns.Year} <= '${filters.to}'`;
+        }
+        return where;
     },
 };
 
