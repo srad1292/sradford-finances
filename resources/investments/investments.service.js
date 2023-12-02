@@ -35,6 +35,17 @@ const InvestmentsService = {
             };
         })
     },
+    getGainsByMonth: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getGainsByMonth(db, filters);
+        return records.map(r => {
+            dateKey = Convert.snakeToCamel(COLUMNS.RecordDate);
+            valueKey = Convert.snakeToCamel(COLUMNS.Gains);
+            return {
+                [dateKey]: r[COLUMNS.RecordDate],
+                [valueKey]: Money.centsToMoney(r[COLUMNS.Gains])
+            };
+        })
+    },
     // Helpers
     calculateFinal: (body) => {
         const initial = Money.moneyToCents(body[COLUMNS.Initial]);
