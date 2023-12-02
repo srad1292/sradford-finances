@@ -121,7 +121,21 @@ InvestmentsController = {
         }
     },
     getGainsByYear: async (req, res, next) => {},
-    getGrowthByMonth: async (req, res, next) => {},
+    getGrowthByMonth: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                sort: req.query.sort,
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            console.log(filter);
+            const result = await InvestmentsService.getGrowthByMonth(db, filter);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     getGrowthByYear: async (req, res, next) => {},
 };
 

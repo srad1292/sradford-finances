@@ -128,6 +128,19 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting records: " + e, 500);
         }
     },
+    getGrowthByMonth: async (db, filters = {}) => {
+        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Final} FROM ${DatabaseTable.investments}`;
+        let where = InvestmentsDao.buildWhereClauseWithDates(filters);
+        let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
+        let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
+        console.log(sql);
+        try {
+            let data = await db.all(sql);
+            return data;
+        } catch(e) {
+            throw new DatabaseException("Error getting records: " + e, 500);
+        }
+    },
     // DAO helpers
     getCreateData: (body) => {
         let columns = "(" + InvestmentsValidator.getCreateColumns().join(",") + ")";
