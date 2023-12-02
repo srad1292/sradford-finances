@@ -133,7 +133,17 @@ InvestmentsController = {
         }
     },
     getGainsByYear: async (req, res, next) => {
-        
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const result = await InvestmentsService.getGainsByYear(db, filter);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
     },
     getGrowthByMonth: async (req, res, next) => {
         try {
@@ -150,7 +160,19 @@ InvestmentsController = {
             next(e);
         }
     },
-    getGrowthByYear: async (req, res, next) => {},
+    getGrowthByYear: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const result = await InvestmentsService.getGrowthByYear(db, filter);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
 };
 
 module.exports = InvestmentsController;

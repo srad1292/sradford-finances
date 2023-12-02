@@ -53,7 +53,7 @@ const InvestmentsDao = {
         }
     },
     getByYear: async(db, filters = {}) => {
-        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions}, ${YearColumns.TotalGains}, ${YearColumns.TotalWithdrawals}, FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) AS ${YearColumns.InitialValue}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} - ${YearColumns.TotalWithdrawals} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${YearColumns.FinalValue}
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions} as ${COLUMNS.Contributions}, ${YearColumns.TotalGains} as ${COLUMNS.Gains}, ${YearColumns.TotalWithdrawals} as ${COLUMNS.Withdrawals}, FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) AS ${COLUMNS.Initial}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} - ${YearColumns.TotalWithdrawals} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${COLUMNS.Final}
         FROM (
           SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, SUM(${COLUMNS.Withdrawals}) as ${YearColumns.TotalWithdrawals}, ${COLUMNS.Initial}, ${COLUMNS.Id}, ${COLUMNS.RecordDate}
           FROM ${DatabaseTable.investments}
@@ -143,6 +143,21 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting records: " + e, 500);
         }
     },
+    getGainsByYear: async(db, filters = {}) => {
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalGains} as ${COLUMNS.Gains}
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}
+          FROM ${DatabaseTable.investments}
+          ${InvestmentsDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${YearColumns.Year}
+          HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
+        ) AS subquery
+        ORDER BY ${YearColumns.Year};`
+        // console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
+    },
     getGrowthByMonth: async (db, filters = {}) => {
         let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Final} FROM ${DatabaseTable.investments}`;
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
@@ -155,6 +170,21 @@ const InvestmentsDao = {
         } catch(e) {
             throw new DatabaseException("Error getting records: " + e, 500);
         }
+    },
+    getGrowthByYear: async (db, filters = {}) => {
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions} + ${YearColumns.TotalGains} - ${YearColumns.TotalWithdrawals} + FIRST_VALUE (${COLUMNS.Initial}) OVER (PARTITION BY ${YearColumns.Year} ORDER BY ${COLUMNS.RecordDate} ASC) as ${COLUMNS.Final}
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, SUM(${COLUMNS.Withdrawals}) as ${YearColumns.TotalWithdrawals}, ${COLUMNS.Initial}, ${COLUMNS.Id}, ${COLUMNS.RecordDate}
+          FROM ${DatabaseTable.investments}
+          ${InvestmentsDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${YearColumns.Year}
+          HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
+        ) AS subquery
+        ORDER BY ${YearColumns.Year};`
+        // console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
     },
     // DAO helpers
     getCreateData: (body) => {

@@ -36,8 +36,16 @@ const InvestmentsService = {
         const records = await InvestmentsDao.getGainsByMonth(db, filters);
         return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
+    getGainsByYear: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getGainsByYear(db, filters);
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
+    },
     getGrowthByMonth: async(db, filters = {}) => {
         const records = await InvestmentsDao.getGrowthByMonth(db, filters);
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
+    },
+    getGrowthByYear: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getGrowthByYear(db, filters);
         return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
     // Helpers

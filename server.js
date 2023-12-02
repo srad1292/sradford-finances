@@ -57,9 +57,9 @@ function setupRoutes() {
   app.get('/investments/net-contributions/month', InvestmentsController.getNetContributionsByMonth);
   app.get('/investments/net-contributions/year', InvestmentsController.getNetContributionsByYear);
   app.get('/investments/gains/month', InvestmentsController.getGainsByMonth);
-  // app.get('/investments/gains/year', InvestmentsController.getGainsByYear);
+  app.get('/investments/gains/year', InvestmentsController.getGainsByYear);
   app.get('/investments/growth/month', InvestmentsController.getGrowthByMonth);
-  // app.get('/investments/growth/year', InvestmentsController.getGrowthByYear);
+  app.get('/investments/growth/year', InvestmentsController.getGrowthByYear);
   app.get('/investments/:id', InvestmentsController.getRecordById);
   app.delete('/investments/:id', InvestmentsController.deleteRecord);
 
