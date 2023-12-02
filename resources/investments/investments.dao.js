@@ -102,8 +102,36 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting investment record with id " + id + ": " + e, 500);
         }
     },
+    getNetContributionsVsGainsByMonth: async (db, filters = {}) => {
+        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Contributions}-${COLUMNS.Withdrawals} as ${COLUMNS.NetContributions}, ${COLUMNS.Gains} FROM ${DatabaseTable.investments}`;
+        let where = InvestmentsDao.buildWhereClauseWithDates(filters);
+        let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
+        let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
+        console.log(sql);
+        try {
+            let data = await db.all(sql);
+            return data;
+        } catch(e) {
+            throw new DatabaseException("Error getting records: " + e, 500);
+        }
+    },
+    getNetContributionsVsGainsByYear: async (db, filters = {}) => {
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions} - ${YearColumns.TotalWithdrawals} as ${COLUMNS.NetContributions}, ${YearColumns.TotalGains} as ${COLUMNS.Gains}
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Withdrawals}) as ${YearColumns.TotalWithdrawals}, SUM(${COLUMNS.Gains}) as ${YearColumns.TotalGains}, ${COLUMNS.RecordDate}
+          FROM ${DatabaseTable.investments}
+          ${InvestmentsDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${YearColumns.Year}
+          HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
+        ) AS subquery
+        ORDER BY ${YearColumns.Year};`
+        // console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
+    },
     getNetContributionsByMonth: async (db, filters = {}) => {
-        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Contributions}-${COLUMNS.Withdrawals} as ${COLUMNS.NetContributions} FROM ${DatabaseTable.investments}`;
+        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Contributions}-${COLUMNS.Withdrawals} as ${COLUMNS.NetContributions}, ${COLUMNS.Gains} FROM ${DatabaseTable.investments}`;
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;

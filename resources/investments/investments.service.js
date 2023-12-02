@@ -1,4 +1,5 @@
 const InvestmentsDao = require('./investments.dao');
+const InvestmentsValidator = require('./investments.validator');
 const Money = require('../../utils/money');
 const Convert = require('../../utils/snake_and_camel');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
@@ -23,6 +24,14 @@ const InvestmentsService = {
     },
     deleteRecord: async (db, id) => {
         return await InvestmentsDao.deleteRecord(db, id);
+    },
+    getNetContributionsVsGainsByMonth: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getNetContributionsVsGainsByMonth(db, filters);
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
+    },
+    getNetContributionsVsGainsByYear: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getNetContributionsVsGainsByYear(db, filters);
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
     getNetContributionsByMonth: async(db, filters = {}) => {
         const records = await InvestmentsDao.getNetContributionsByMonth(db, filters);
@@ -81,7 +90,34 @@ const InvestmentsService = {
             }
         });
         return rowAsJs;
-    }
+    },
+    convertToMonthlySheet: (data) => {
+        console.log(data[0]);
+        return data.map(row => {
+            let data = [];
+            InvestmentsValidator.getCreateColumns().forEach(column => {
+                if(column === COLUMNS.RecordDate) {
+                    data.push({type: 'String', value: row[column]});
+                } else {
+                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
+                }
+            });
+            return data;
+        });
+    },
+    convertToYearlySheet: (data) => {
+        return data.map(row => {
+            let data = [];
+            InvestmentsValidator.getYearlyColumns().forEach(column => {
+                if(column === YearColumns.Year) {
+                    data.push({type: 'String', value: row[column]});
+                } else {
+                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
+                }
+            });
+            return data;
+        });
+    },
     
 }
 

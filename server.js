@@ -34,7 +34,8 @@ function setupRoutes() {
   app.get('/analytics/expenses-per-month', AnalyticsController.getExpensesPerMonth);
   app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
 
-  // app.get('/analytics/investments/net-contributions-vs-gains', AnalyticsInvestmentsController.getNetContributionsVsGains);
+  // app.get('/analytics/investments/net-contributions-vs-gains/month', AnalyticsInvestmentsController.getNetContributionsVsGainsByMonth);
+  // app.get('/analytics/investments/net-contributions-vs-gains/year', AnalyticsInvestmentsController.getNetContributionsVsGainsByYear);
   // app.get('/analytics/investments/net-contributions/month', AnalyticsInvestmentsController.getNetContributionsByMonth);
   // app.get('/analytics/investments/net-contributions/year', AnalyticsInvestmentsController.getNetContributionsByYear);
   // app.get('/analytics/investments/gains/month', AnalyticsInvestmentsController.getGainsByMonth);
@@ -52,8 +53,11 @@ function setupRoutes() {
   app.post('/investments', InvestmentsController.createInvestmentsData);
   app.get('/investments', InvestmentsController.getAllRecords);
   app.put('/investments', InvestmentsController.updateRecord);
+  app.get('/investments/spreadsheet/month', InvestmentsController.getMonthlySpreadsheet);
+  app.get('/investments/spreadsheet/year', InvestmentsController.getYearlySpreadsheet);
   app.get('/investments/year', InvestmentsController.getByYear);
-  // app.get('/investments/net-contributions-vs-gains', InvestmentsController.getNetContributionsVsGains);
+  app.get('/investments/net-contributions-vs-gains/month', InvestmentsController.getNetContributionsVsGainsByMonth);
+  app.get('/investments/net-contributions-vs-gains/year', InvestmentsController.getNetContributionsVsGainsByYear);
   app.get('/investments/net-contributions/month', InvestmentsController.getNetContributionsByMonth);
   app.get('/investments/net-contributions/year', InvestmentsController.getNetContributionsByYear);
   app.get('/investments/gains/month', InvestmentsController.getGainsByMonth);

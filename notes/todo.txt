@@ -7,10 +7,8 @@ Derive start and end date for graphs and display either in title or in dataset l
     - Connect to path from db instead of local test db
 
 * Investments: 
-
 Endpoints:
 
-Create excel sheet
 Charts: 
   Growth by month - Line 
   Growth by year - Line

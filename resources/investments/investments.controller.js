@@ -1,9 +1,10 @@
-const Database = require("../../db");
-const APIException = require("../../errors/api_exception");
 const InvestmentsValidator = require('./investments.validator');
 const InvestmentsService = require('./investments.service');
 const InvestmentsDao = require('./investments.dao');
-
+const Database = require("../../db");
+const APIException = require("../../errors/api_exception");
+const DocumentManager = require("../../utils/document-manager");
+const XL = require('excel4node');
 
 InvestmentsController = {
     createInvestmentsData: async (req, res, next) => {
@@ -88,7 +89,68 @@ InvestmentsController = {
             next(e);
         }
     },
-    getNetContributionsVsGains: async (req, res, next) => {},
+    // Spreadsheet Endpoints
+    getMonthlySpreadsheet: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                sort: req.query.sort,
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            const records = await InvestmentsService.getAllRecords(db, filter);
+            const sheetData = InvestmentsService.convertToMonthlySheet(records);
+            // res.status(200).send(sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Monthly-Investments', InvestmentsValidator.getCreateColumns(), sheetData);
+            financeWorkbook.write('Monthly-Investments.xlsx', res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getYearlySpreadsheet: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to,
+            }
+            const records = await InvestmentsService.getByYear(db, filter);
+            const sheetData = InvestmentsService.convertToYearlySheet(records);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Yearly-Investments', InvestmentsValidator.getYearlyColumns(), sheetData);
+            financeWorkbook.write('Yearly-Investments.xlsx', res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    // Analytics Data Endpoints
+    getNetContributionsVsGainsByMonth: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                sort: req.query.sort,
+                startDate: req.query.startDate,
+                endDate: req.query.endDate,
+            }
+            console.log(filter);
+            const result = await InvestmentsService.getNetContributionsVsGainsByMonth(db, filter);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getNetContributionsVsGainsByYear: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const result = await InvestmentsService.getNetContributionsVsGainsByYear(db, filter);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     getNetContributionsByMonth: async (req, res, next) => {
         try {
             const db = await Database.getDb();

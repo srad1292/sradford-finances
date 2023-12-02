@@ -1,6 +1,7 @@
 const Convert = require('../../utils/snake_and_camel');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const COLUMNS = DatabaseColumns.InvestmentsColumns;
+const YearColumns = DatabaseColumns.InvestmentsYearColumns;
 
 InvestmentsValidator = {
     updateColumns: [COLUMNS.Id],
@@ -8,6 +9,11 @@ InvestmentsValidator = {
     derivedColumns: [COLUMNS.Final],
     getCreateColumns: () => {
         return [...InvestmentsValidator.givenColumns, ...InvestmentsValidator.derivedColumns];
+    },
+    getYearlyColumns: () => {
+        let result = InvestmentsValidator.getCreateColumns();
+        result[0] = YearColumns.Year;
+        return result;
     },
     validateCreateData: (body) => {
         let errors = [];
