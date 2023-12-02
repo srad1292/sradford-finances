@@ -14,10 +14,12 @@ Create excel sheet
 Charts: 
   Growth by month - Line 
   Growth by year - Line
-  Breakdown by month - Stacked bar (option to show initial or not)
-  Breakdown by year - Stacked bar (option to show initial or not)
   Contributions by month - Bar 
   Contributions by year - Bar 
   Gains by month - Bar
   Gains by Year - Bar
-  Contributions(sum) vs gains(sum) over time - double line
+  
+  Breakdown by month - Stacked bar (option to show initial or not)
+  Breakdown by year - Stacked bar (option to show initial or not)
+
+  Contributions(sum)-Withdrawals(sum) vs gains(sum) over time - double line

@@ -5,6 +5,7 @@ const Database = require('./db');
 const APIException = require('./errors/api_exception');
 const MonthlyController = require("./resources/monthly/monthly.controller");
 const AnalyticsController = require("./resources/analytics/analytics.controller");
+const AnalyticsInvestmentsController = require("./resources/analytics/analytics-investments.controller");
 const InvestmentsController = require("./resources/investments/investments.controller");
 
 const app = express();
@@ -33,10 +34,32 @@ function setupRoutes() {
   app.get('/analytics/expenses-per-month', AnalyticsController.getExpensesPerMonth);
   app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
 
+  // app.get('/analytics/investments/net-contributions-vs-gains', AnalyticsInvestmentsController.getNetContributionsVsGains);
+  // app.get('/analytics/investments/net-contributions/month', AnalyticsInvestmentsController.getNetContributionsByMonth);
+  // app.get('/analytics/investments/net-contributions/year', AnalyticsInvestmentsController.getNetContributionsByYear);
+  // app.get('/analytics/investments/gains/month', AnalyticsInvestmentsController.getGainsByMonth);
+  // app.get('/analytics/investments/gains/year', AnalyticsInvestmentsController.getGainsByYear);
+  // app.get('/analytics/investments/growth/month', AnalyticsInvestmentsController.getGrowthByMonth);
+  // app.get('/analytics/investments/growth/year', AnalyticsInvestmentsController.getGrowthByYear);
+
+  /**
+  Breakdown by month - Stacked bar (option to show initial or not)
+  Breakdown by year - Stacked bar (option to show initial or not)
+   */
+
+  
+
   app.post('/investments', InvestmentsController.createInvestmentsData);
   app.get('/investments', InvestmentsController.getAllRecords);
   app.put('/investments', InvestmentsController.updateRecord);
   app.get('/investments/year', InvestmentsController.getByYear);
+  // app.get('/investments/net-contributions-vs-gains', InvestmentsController.getNetContributionsVsGains);
+  app.get('/investments/net-contributions/month', InvestmentsController.getNetContributionsByMonth);
+  // app.get('/investments/net-contributions/year', InvestmentsController.getNetContributionsByYear);
+  // app.get('/investments/gains/month', InvestmentsController.getGainsByMonth);
+  // app.get('/investments/gains/year', InvestmentsController.getGainsByYear);
+  // app.get('/investments/growth/month', InvestmentsController.getGrowthByMonth);
+  // app.get('/investments/growth/year', InvestmentsController.getGrowthByYear);
   app.get('/investments/:id', InvestmentsController.getRecordById);
   app.delete('/investments/:id', InvestmentsController.deleteRecord);
 

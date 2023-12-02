@@ -27,6 +27,8 @@ const InvestmentsColumns = {
     Gains: 'gains',
     Withdrawals: 'withdrawals',
     Final: 'final',
+    // Derived Columns, not part of table
+    NetContributions: 'net_contributions',
 }
 
 // Result table from query, not a persistent table

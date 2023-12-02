@@ -24,6 +24,17 @@ const InvestmentsService = {
     deleteRecord: async (db, id) => {
         return await InvestmentsDao.deleteRecord(db, id);
     },
+    getNetContributionsByMonth: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getNetContributionsByMonth(db, filters);
+        return records.map(r => {
+            dateKey = Convert.snakeToCamel(COLUMNS.RecordDate);
+            valueKey = Convert.snakeToCamel(COLUMNS.NetContributions);
+            return {
+                [dateKey]: r[COLUMNS.RecordDate],
+                [valueKey]: Money.centsToMoney(r[COLUMNS.NetContributions])
+            };
+        })
+    },
     // Helpers
     calculateFinal: (body) => {
         const initial = Money.moneyToCents(body[COLUMNS.Initial]);

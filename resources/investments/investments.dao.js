@@ -62,7 +62,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        console.log(sql);
+        // console.log(sql);
         let data = await db.all(sql);
         // console.log(data);
         return data;
@@ -100,6 +100,19 @@ const InvestmentsDao = {
                 throw(e);
             }
             throw new DatabaseException("Error getting investment record with id " + id + ": " + e, 500);
+        }
+    },
+    getNetContributionsByMonth: async (db, filters = {}) => {
+        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Contributions}-${COLUMNS.Withdrawals} as ${COLUMNS.NetContributions} FROM ${DatabaseTable.investments}`;
+        let where = InvestmentsDao.buildWhereClauseWithDates(filters);
+        let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
+        let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
+        console.log(sql);
+        try {
+            let data = await db.all(sql);
+            return data;
+        } catch(e) {
+            throw new DatabaseException("Error getting records: " + e, 500);
         }
     },
     // DAO helpers
