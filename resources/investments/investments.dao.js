@@ -115,6 +115,21 @@ const InvestmentsDao = {
             throw new DatabaseException("Error getting records: " + e, 500);
         }
     },
+    getNetContributionsByYear: async (db, filters = {}) => {
+        let sql = `SELECT DISTINCT (${YearColumns.Year}) ${YearColumns.Year}, ${YearColumns.TotalContributions} - ${YearColumns.TotalWithdrawals} as ${COLUMNS.NetContributions}
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.RecordDate}) AS ${YearColumns.Year}, SUM (${COLUMNS.Contributions}) AS ${YearColumns.TotalContributions}, SUM(${COLUMNS.Withdrawals}) as ${YearColumns.TotalWithdrawals}, ${COLUMNS.RecordDate}
+          FROM ${DatabaseTable.investments}
+          ${InvestmentsDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${YearColumns.Year}
+          HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
+        ) AS subquery
+        ORDER BY ${YearColumns.Year};`
+        // console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
+    },
     getGainsByMonth: async (db, filters = {}) => {
         let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Gains} FROM ${DatabaseTable.investments}`;
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);

@@ -104,7 +104,19 @@ InvestmentsController = {
             next(e);
         }
     },
-    getNetContributionsByYear: async (req, res, next) => {},
+    getNetContributionsByYear: async (req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const result = await InvestmentsService.getNetContributionsByYear(db, filter);
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     getGainsByMonth: async (req, res, next) => {
         try {
             const db = await Database.getDb();
@@ -120,7 +132,9 @@ InvestmentsController = {
             next(e);
         }
     },
-    getGainsByYear: async (req, res, next) => {},
+    getGainsByYear: async (req, res, next) => {
+        
+    },
     getGrowthByMonth: async (req, res, next) => {
         try {
             const db = await Database.getDb();

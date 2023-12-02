@@ -26,36 +26,19 @@ const InvestmentsService = {
     },
     getNetContributionsByMonth: async(db, filters = {}) => {
         const records = await InvestmentsDao.getNetContributionsByMonth(db, filters);
-        return records.map(r => {
-            dateKey = Convert.snakeToCamel(COLUMNS.RecordDate);
-            valueKey = Convert.snakeToCamel(COLUMNS.NetContributions);
-            return {
-                [dateKey]: r[COLUMNS.RecordDate],
-                [valueKey]: Money.centsToMoney(r[COLUMNS.NetContributions])
-            };
-        })
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
+    },
+    getNetContributionsByYear: async(db, filters = {}) => {
+        const records = await InvestmentsDao.getNetContributionsByYear(db, filters);
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
     getGainsByMonth: async(db, filters = {}) => {
         const records = await InvestmentsDao.getGainsByMonth(db, filters);
-        return records.map(r => {
-            dateKey = Convert.snakeToCamel(COLUMNS.RecordDate);
-            valueKey = Convert.snakeToCamel(COLUMNS.Gains);
-            return {
-                [dateKey]: r[COLUMNS.RecordDate],
-                [valueKey]: Money.centsToMoney(r[COLUMNS.Gains])
-            };
-        })
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
     getGrowthByMonth: async(db, filters = {}) => {
         const records = await InvestmentsDao.getGrowthByMonth(db, filters);
-        return records.map(r => {
-            dateKey = Convert.snakeToCamel(COLUMNS.RecordDate);
-            valueKey = Convert.snakeToCamel(COLUMNS.Final);
-            return {
-                [dateKey]: r[COLUMNS.RecordDate],
-                [valueKey]: Money.centsToMoney(r[COLUMNS.Final])
-            };
-        })
+        return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
     // Helpers
     calculateFinal: (body) => {
@@ -71,7 +54,7 @@ const InvestmentsService = {
         let rowAsJs = {};
         Object.entries(data).forEach(entry => {
             let [key, value] = entry;
-            if(key === COLUMNS.RecordDate || key === COLUMNS.Id) {
+            if(key === YearColumns.Year || key === COLUMNS.RecordDate || key === COLUMNS.Id) {
                 rowAsJs[Convert.snakeToCamel(key)] = value;
             } else {
                 rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);
