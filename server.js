@@ -34,8 +34,8 @@ function setupRoutes() {
   app.get('/analytics/expenses-per-month', AnalyticsController.getExpensesPerMonth);
   app.get('/analytics/expenses-over-time', AnalyticsController.getExpensesOverTime);
 
-  // app.get('/analytics/investments/net-contributions-vs-gains/month', AnalyticsInvestmentsController.getNetContributionsVsGainsByMonth);
-  // app.get('/analytics/investments/net-contributions-vs-gains/year', AnalyticsInvestmentsController.getNetContributionsVsGainsByYear);
+  app.get('/analytics/investments/net-contributions-vs-gains/month', AnalyticsInvestmentsController.getNetContributionsVsGainsByMonth);
+  app.get('/analytics/investments/net-contributions-vs-gains/year', AnalyticsInvestmentsController.getNetContributionsVsGainsByYear);
   app.get('/analytics/investments/net-contributions/month', AnalyticsInvestmentsController.getNetContributionsByMonth);
   app.get('/analytics/investments/net-contributions/year', AnalyticsInvestmentsController.getNetContributionsByYear);
   app.get('/analytics/investments/gains/month', AnalyticsInvestmentsController.getGainsByMonth);

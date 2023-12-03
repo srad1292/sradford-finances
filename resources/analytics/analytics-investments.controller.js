@@ -8,10 +8,46 @@ const ChartService = require("./chart.service");
 const AnalyticsInvestmentsController = {
 
     getNetContributionsVsGainsByMonth: async (req, res, next) => {
+        const db = await Database.getDb();
+        const filter = {
+            sort: req.query.sort,
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+        }
+        const records = await InvestmentsService.getNetContributionsVsGainsByMonth(db, filter);
+        const netDataSet = AnalyticsInvestmentsService.convertNetContributionsByMonth(records);
+        const gainsDataSet = AnalyticsInvestmentsService.convertGainsByMonth(records);
+        const dataSets = [
+            {label: 'Net Contributions', data: netDataSet},
+            {label: 'Gains', data: gainsDataSet}
+        ];
+        const options = {
+            mono: req.query.mono === 'false' ? false : true,
+            showLegend: true,
+        };
 
+        const config = ChartService.createLineConfig(dataSets, "Net Contributions vs Gains - By Month", options);
+        AnalyticsController.createAndSendImage(config, "net-contributions-vs-gains-by-month.png", res);
     },
     getNetContributionsVsGainsByYear: async (req, res, next) => {
-
+        const db = await Database.getDb();
+        const filter = {
+            from: req.query.from,
+            to: req.query.to,
+        }
+        const records = await InvestmentsService.getNetContributionsVsGainsByYear(db, filter);
+        const netDataSet = AnalyticsInvestmentsService.convertNetContributionsByYear(records);
+        const gainsDataSet = AnalyticsInvestmentsService.convertGainsByYear(records);
+        const dataSets = [
+            {label: 'Net Contributions', data: netDataSet},
+            {label: 'Gains', data: gainsDataSet}
+        ];
+        const options = {
+            mono: req.query.mono === 'false' ? false : true,
+            showLegend: true,
+        };
+        const config = ChartService.createLineConfig(dataSets, "Net Contributions vs Gains - By Year", options);
+        AnalyticsController.createAndSendImage(config, "net-contributions-vs-gains-by-year.png", res);
     },
     getNetContributionsByMonth: async (req, res, next) => {
         const db = await Database.getDb();
