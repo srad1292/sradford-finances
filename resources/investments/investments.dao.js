@@ -131,7 +131,7 @@ const InvestmentsDao = {
         return data;
     },
     getNetContributionsByMonth: async (db, filters = {}) => {
-        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Contributions}-${COLUMNS.Withdrawals} as ${COLUMNS.NetContributions}, ${COLUMNS.Gains} FROM ${DatabaseTable.investments}`;
+        let select = `SELECT ${COLUMNS.RecordDate}, ${COLUMNS.Contributions}-${COLUMNS.Withdrawals} as ${COLUMNS.NetContributions} FROM ${DatabaseTable.investments}`;
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;

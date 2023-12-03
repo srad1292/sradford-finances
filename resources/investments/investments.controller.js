@@ -160,7 +160,8 @@ InvestmentsController = {
                 endDate: req.query.endDate,
             }
             console.log(filter);
-            const result = await InvestmentsService.getNetContributionsByMonth(db, filter);
+            const records = await InvestmentsService.getNetContributionsByMonth(db, filter);
+            const result = records.map(r => InvestmentsService.convertRecordToJson(r));
             res.status(200).send(result);
         } catch(e) {
             next(e);
@@ -173,7 +174,8 @@ InvestmentsController = {
                 from: req.query.from,
                 to: req.query.to
             }
-            const result = await InvestmentsService.getNetContributionsByYear(db, filter);
+            const records = await InvestmentsService.getNetContributionsByYear(db, filter);
+            const result = records.map(r => InvestmentsService.convertRecordToJson(r));
             res.status(200).send(result);
         } catch(e) {
             next(e);

@@ -6,14 +6,18 @@ Derive start and end date for graphs and display either in title or in dataset l
     - Use env to get path
     - Connect to path from db instead of local test db
 
+* Monthly
+  - Rename monthly throughout to earnings-and-expenses
+
 * Investments: 
 Endpoints:
+
+- For spreadsheets and maybe for growth by time analytics -> 
+    Add a new calculated value in response that is %change from previous period
 
 Charts: 
   Growth by month - Line 
   Growth by year - Line
-  Contributions by month - Bar 
-  Contributions by year - Bar 
   Gains by month - Bar
   Gains by Year - Bar
   

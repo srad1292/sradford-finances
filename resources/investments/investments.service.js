@@ -34,12 +34,10 @@ const InvestmentsService = {
         return records.map(r => InvestmentsService.convertRecordToJson(r));
     },
     getNetContributionsByMonth: async(db, filters = {}) => {
-        const records = await InvestmentsDao.getNetContributionsByMonth(db, filters);
-        return records.map(r => InvestmentsService.convertRecordToJson(r));
+        return await InvestmentsDao.getNetContributionsByMonth(db, filters);
     },
     getNetContributionsByYear: async(db, filters = {}) => {
-        const records = await InvestmentsDao.getNetContributionsByYear(db, filters);
-        return records.map(r => InvestmentsService.convertRecordToJson(r));
+        return await InvestmentsDao.getNetContributionsByYear(db, filters);
     },
     getGainsByMonth: async(db, filters = {}) => {
         const records = await InvestmentsDao.getGainsByMonth(db, filters);
