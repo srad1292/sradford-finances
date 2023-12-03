@@ -40,8 +40,8 @@ function setupRoutes() {
   app.get('/analytics/investments/net-contributions/year', AnalyticsInvestmentsController.getNetContributionsByYear);
   app.get('/analytics/investments/gains/month', AnalyticsInvestmentsController.getGainsByMonth);
   app.get('/analytics/investments/gains/year', AnalyticsInvestmentsController.getGainsByYear);
-  // app.get('/analytics/investments/growth/month', AnalyticsInvestmentsController.getGrowthByMonth);
-  // app.get('/analytics/investments/growth/year', AnalyticsInvestmentsController.getGrowthByYear);
+  app.get('/analytics/investments/growth/month', AnalyticsInvestmentsController.getGrowthByMonth);
+  app.get('/analytics/investments/growth/year', AnalyticsInvestmentsController.getGrowthByYear);
 
   /**
   Breakdown by month - Stacked bar (option to show initial or not)

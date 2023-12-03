@@ -71,8 +71,35 @@ const AnalyticsInvestmentsController = {
         const config = ChartService.createVerticalBarChartConfig(data, "Gains By Year", options);
         AnalyticsController.createAndSendImage(config, "gains-by-year.png", res);
     },
-    getGrowthByMonth: async (req, res, next) => {},
-    getGrowthByYear: async (req, res, next) => {},
+    getGrowthByMonth: async (req, res, next) => {
+        const db = await Database.getDb();
+        const filter = {
+            sort: req.query.sort,
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+        }
+        const records = await InvestmentsService.getGrowthByMonth(db, filter);
+        const data = AnalyticsInvestmentsService.convertGrowthByMonth(records);
+        const options = {
+            mono: req.query.mono === 'false' ? false : true,
+        };
+        const config = ChartService.createLineConfig([{label: '', data}], "Growth By Month", options);
+        AnalyticsController.createAndSendImage(config, "growth-by-month.png", res);
+    },
+    getGrowthByYear: async (req, res, next) => {
+        const db = await Database.getDb();
+        const filter = {
+            from: req.query.from,
+            to: req.query.to,
+        }
+        const records = await InvestmentsService.getGrowthByYear(db, filter);
+        const data = AnalyticsInvestmentsService.convertGrowthByYear(records);
+        const options = {
+            mono: req.query.mono === 'false' ? false : true,
+        };
+        const config = ChartService.createLineConfig([{label: '', data}], "Growth By Year", options);
+        AnalyticsController.createAndSendImage(config, "growth-by-year.png", res);
+    },
 }
 
 module.exports = AnalyticsInvestmentsController;

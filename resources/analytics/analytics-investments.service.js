@@ -37,6 +37,22 @@ AnalyticsInvestmentsService = {
             }
         });
     },
+    convertGrowthByMonth: (data) => {
+        return data.map(row => {
+            return {
+                label: row[COLUMNS.RecordDate],
+                value: Money.centsToMoney(row[COLUMNS.Final])
+            }
+        });
+    },
+    convertGrowthByYear: (data) => {
+        return data.map(row => {
+            return {
+                label: row[YearColumns.Year],
+                value: Money.centsToMoney(row[COLUMNS.Final])
+            }
+        });
+    },
 }
 
 module.exports = AnalyticsInvestmentsService;
