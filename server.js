@@ -38,8 +38,8 @@ function setupRoutes() {
   // app.get('/analytics/investments/net-contributions-vs-gains/year', AnalyticsInvestmentsController.getNetContributionsVsGainsByYear);
   app.get('/analytics/investments/net-contributions/month', AnalyticsInvestmentsController.getNetContributionsByMonth);
   app.get('/analytics/investments/net-contributions/year', AnalyticsInvestmentsController.getNetContributionsByYear);
-  // app.get('/analytics/investments/gains/month', AnalyticsInvestmentsController.getGainsByMonth);
-  // app.get('/analytics/investments/gains/year', AnalyticsInvestmentsController.getGainsByYear);
+  app.get('/analytics/investments/gains/month', AnalyticsInvestmentsController.getGainsByMonth);
+  app.get('/analytics/investments/gains/year', AnalyticsInvestmentsController.getGainsByYear);
   // app.get('/analytics/investments/growth/month', AnalyticsInvestmentsController.getGrowthByMonth);
   // app.get('/analytics/investments/growth/year', AnalyticsInvestmentsController.getGrowthByYear);
 

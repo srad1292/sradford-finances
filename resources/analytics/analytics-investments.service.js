@@ -21,6 +21,22 @@ AnalyticsInvestmentsService = {
             }
         });
     },
+    convertGainsByMonth: (data) => {
+        return data.map(row => {
+            return {
+                label: row[COLUMNS.RecordDate],
+                value: Money.centsToMoney(row[COLUMNS.Gains])
+            }
+        });
+    },
+    convertGainsByYear: (data) => {
+        return data.map(row => {
+            return {
+                label: row[YearColumns.Year],
+                value: Money.centsToMoney(row[COLUMNS.Gains])
+            }
+        });
+    },
 }
 
 module.exports = AnalyticsInvestmentsService;
