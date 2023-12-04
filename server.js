@@ -36,6 +36,7 @@ function setupRoutes() {
 
   
   app.get('/analytics/investments/stacked/month', AnalyticsInvestmentsController.getStackedByMonth);
+  app.get('/analytics/investments/stacked/year', AnalyticsInvestmentsController.getStackedByYear);
   app.get('/analytics/investments/net-contributions-vs-gains/month', AnalyticsInvestmentsController.getNetContributionsVsGainsByMonth);
   app.get('/analytics/investments/net-contributions-vs-gains/year', AnalyticsInvestmentsController.getNetContributionsVsGainsByYear);
   app.get('/analytics/investments/net-contributions/month', AnalyticsInvestmentsController.getNetContributionsByMonth);
@@ -45,10 +46,6 @@ function setupRoutes() {
   app.get('/analytics/investments/growth/month', AnalyticsInvestmentsController.getGrowthByMonth);
   app.get('/analytics/investments/growth/year', AnalyticsInvestmentsController.getGrowthByYear);
 
-  /**
-  Breakdown by month - Stacked bar (option to show initial or not)
-  Breakdown by year - Stacked bar (option to show initial or not)
-   */
 
   
 

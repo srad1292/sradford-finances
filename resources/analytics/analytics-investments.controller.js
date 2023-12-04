@@ -14,12 +14,26 @@ const AnalyticsInvestmentsController = {
             endDate: req.query.endDate,
         }
         const records = await InvestmentsService.getAllRecords(db, filter);
-        const stackedDataSets = AnalyticsInvestmentsService.convertStackedByMonth(records);
+        const stackedDataSets = AnalyticsInvestmentsService.convertStackedByPeriod(records, 'month');
         const options = {
             showLegend: true,
         };
         const config = ChartService.createStackedBar(stackedDataSets, "Monthly Investments Breakdown", options);
         AnalyticsController.createAndSendImage(config, "monthly-investments-breakdown.png", res);
+    },
+    getStackedByYear: async (req, res, next) => {
+        const db = await Database.getDb();
+        const filter = {
+            from: req.query.from,
+            to: req.query.to,
+        }
+        const records = await InvestmentsService.getByYear(db, filter);
+        const stackedDataSets = AnalyticsInvestmentsService.convertStackedByPeriod(records, 'year');
+        const options = {
+            showLegend: true,
+        };
+        const config = ChartService.createStackedBar(stackedDataSets, "Yearly Investments Breakdown", options);
+        AnalyticsController.createAndSendImage(config, "yearly-investments-breakdown.png", res);
     },
     getNetContributionsVsGainsByMonth: async (req, res, next) => {
         const db = await Database.getDb();

@@ -53,7 +53,7 @@ AnalyticsInvestmentsService = {
             }
         });
     },
-    convertStackedByMonth: (data) => {
+    convertStackedByPeriod: (data, period) => {
         /**
          * {
          *  labels: string[]
@@ -66,7 +66,7 @@ AnalyticsInvestmentsService = {
         let withdrawals = [];
         let gains = [];
         data.forEach(row => {
-            labels.push(row[COLUMNS.RecordDate]);
+            labels.push(period === 'month' ? row[COLUMNS.RecordDate] : row[YearColumns.Year]);
             initial.push(Money.centsToMoney(row[COLUMNS.Initial]));
             contributions.push(Money.centsToMoney(row[COLUMNS.Contributions]));
             withdrawals.push(Money.centsToMoney(-1 * row[COLUMNS.Withdrawals]));
@@ -82,8 +82,6 @@ AnalyticsInvestmentsService = {
                 {label: 'Gains', data: gains},
             ]
         };
-        
-
     }
 }
 

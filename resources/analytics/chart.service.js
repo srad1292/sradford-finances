@@ -18,6 +18,7 @@ ChartService = {
         'rgb(204, 80, 133)',
         'rgb(105, 101, 230)',
     ],
+    gray: 'rgb(232,230,230)',
     createImage: async (configuration, height = 1000, width = 1000) => {
         const chartJSNodeCanvas = new ChartJSNodeCanvas ({ type: 'png', width: width, height: height });
         const dataUrl = await chartJSNodeCanvas.renderToDataURL(configuration); // converts chart to image
@@ -63,8 +64,8 @@ ChartService = {
                     return {
                         label: dataset.label,
                         data: dataset.data,
-                        backgroundColor: ChartService.basicColors[i],
-                        borderColor: ChartService.basicColors[i],
+                        backgroundColor: i === 0 ? ChartService.gray : ChartService.basicColors[i-1],
+                        borderColor: i === 0 ? ChartService.gray : ChartService.basicColors[i-1],
                     };
                 }),
             },
