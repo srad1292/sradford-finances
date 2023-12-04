@@ -6,7 +6,21 @@ const ChartService = require("./chart.service");
 
 
 const AnalyticsInvestmentsController = {
-
+    getStackedByMonth: async (req, res, next) => {
+        const db = await Database.getDb();
+        const filter = {
+            sort: req.query.sort,
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+        }
+        const records = await InvestmentsService.getAllRecords(db, filter);
+        const stackedDataSets = AnalyticsInvestmentsService.convertStackedByMonth(records);
+        const options = {
+            showLegend: true,
+        };
+        const config = ChartService.createStackedBar(stackedDataSets, "Monthly Investments Breakdown", options);
+        AnalyticsController.createAndSendImage(config, "monthly-investments-breakdown.png", res);
+    },
     getNetContributionsVsGainsByMonth: async (req, res, next) => {
         const db = await Database.getDb();
         const filter = {

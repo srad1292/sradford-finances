@@ -54,6 +54,42 @@ ChartService = {
             }
         };
     },
+    createStackedBar: (stackedDataSets, title, options) => {
+        return {
+            type: 'bar',
+            data: {
+                labels: stackedDataSets.labels.map(i => Convert.snakeToTitle(i)),
+                datasets: stackedDataSets.datasets.map((dataset, i) => { 
+                    return {
+                        label: dataset.label,
+                        data: dataset.data,
+                        backgroundColor: ChartService.basicColors[i],
+                        borderColor: ChartService.basicColors[i],
+                    };
+                }),
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                      },
+                    y: {
+                        stacked: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                    },
+                    legend: {
+                        display: options.showLegend === true,
+                    },
+                }
+            }
+        };
+    },
     createDoubleVerticalBarChartConfig: (datasets, title, options) => {
         return config = {
             type: 'bar',

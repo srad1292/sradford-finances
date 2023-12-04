@@ -53,6 +53,38 @@ AnalyticsInvestmentsService = {
             }
         });
     },
+    convertStackedByMonth: (data) => {
+        /**
+         * {
+         *  labels: string[]
+         *  datasets: [{label: string, data: investment[]}]
+         * }
+         */
+        let labels = [];
+        let initial = [];
+        let contributions = [];
+        let withdrawals = [];
+        let gains = [];
+        data.forEach(row => {
+            labels.push(row[COLUMNS.RecordDate]);
+            initial.push(Money.centsToMoney(row[COLUMNS.Initial]));
+            contributions.push(Money.centsToMoney(row[COLUMNS.Contributions]));
+            withdrawals.push(Money.centsToMoney(-1 * row[COLUMNS.Withdrawals]));
+            gains.push(Money.centsToMoney(row[COLUMNS.Gains]));
+        });
+
+        return {
+            labels,
+            datasets: [
+                {label: 'Initial', data: initial},
+                {label: 'Contributions', data: contributions},
+                {label: 'Withdrawals', data: withdrawals},
+                {label: 'Gains', data: gains},
+            ]
+        };
+        
+
+    }
 }
 
 module.exports = AnalyticsInvestmentsService;

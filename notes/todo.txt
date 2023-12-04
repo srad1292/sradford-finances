@@ -16,9 +16,6 @@ Endpoints:
     Add a new calculated value in response that is %change from previous period
 
 Charts: 
-  net vs gains over month - double line
-  net vs gains over year - double line
-  
   Breakdown by month - Stacked bar (option to show initial or not)
   Breakdown by year - Stacked bar (option to show initial or not)
 
