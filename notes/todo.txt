@@ -6,8 +6,9 @@ Derive start and end date for graphs and display either in title or in dataset l
     - Use env to get path
     - Connect to path from db instead of local test db
 
-* Monthly
-  - Rename monthly throughout to earnings-and-expenses
+* Earnings and Expenses
+ Endpoints/Charts 
+  - Yearly versions of all gets/charts
 
 * Investments: 
 Endpoints:
@@ -15,8 +16,5 @@ Endpoints:
 - For spreadsheets and maybe for growth by time analytics -> 
     Add a new calculated value in response that is %change from previous period
 
-Charts: 
-  Breakdown by month - Stacked bar (option to show initial or not)
-  Breakdown by year - Stacked bar (option to show initial or not)
 
 
