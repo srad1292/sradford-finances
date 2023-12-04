@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const Database = require('./db');
 const APIException = require('./errors/api_exception');
-const MonthlyController = require("./resources/monthly/monthly.controller");
+const EarningsAndExpensesController = require("./resources/earnings_and_expenses/earnings-and-expenses.controller");
 const AnalyticsController = require("./resources/analytics/analytics.controller");
 const AnalyticsInvestmentsController = require("./resources/analytics/analytics-investments.controller");
 const InvestmentsController = require("./resources/investments/investments.controller");
@@ -66,12 +66,12 @@ function setupRoutes() {
   app.get('/investments/:id', InvestmentsController.getRecordById);
   app.delete('/investments/:id', InvestmentsController.deleteRecord);
 
-  app.post('/monthly-data', MonthlyController.createMonthlyData);
-  app.put('/monthly-data', MonthlyController.updateMonthlyData);
-  app.get('/monthly-data', MonthlyController.getAllMonthlyData);
-  app.get('/monthly-data/spreadsheet', MonthlyController.getAllMonthlyDataAsSpreadsheet);
-  app.get('/monthly-data/:id', MonthlyController.getMonthlyDataById);
-  app.delete('/monthly-data/:id', MonthlyController.deleteMonthlyRecord);
+  app.post('/earnings-and-expenses', EarningsAndExpensesController.createMonthlyData);
+  app.put('/earnings-and-expenses', EarningsAndExpensesController.updateMonthlyData);
+  app.get('/earnings-and-expenses', EarningsAndExpensesController.getAllMonthlyData);
+  app.get('/earnings-and-expenses/spreadsheet', EarningsAndExpensesController.getAllMonthlyDataAsSpreadsheet);
+  app.get('/earnings-and-expenses/:id', EarningsAndExpensesController.getMonthlyDataById);
+  app.delete('/earnings-and-expenses/:id', EarningsAndExpensesController.deleteMonthlyRecord);
 
 
   

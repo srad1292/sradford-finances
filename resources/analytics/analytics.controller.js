@@ -1,7 +1,7 @@
 const AnalyticsService = require("./analytics.service");
 const ChartService = require("./chart.service");
 const Database = require("../../db");
-const MonthlyService = require("../monthly/monthly.service");
+const EarningsAndExpensesService = require("../earnings_and_expenses/earnings-and-expenses.service");
 const path = require('path');
 const fs = require('fs');
 
@@ -21,7 +21,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             let data = AnalyticsService.convertMonthlyDbToExpenseTotals(records);
             data = data.sort((a,b) => req.query.sort === 'DESC' ? b.value - a.value : a.value - b.value);
             const options = {
@@ -40,7 +40,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             const data = AnalyticsService.convertMonthlyDbToExpensePerMonth(records);
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
@@ -58,7 +58,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             const data = AnalyticsService.convertMonthlyDbToExpenseOverTime(records);
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
@@ -76,7 +76,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             const data = AnalyticsService.convertMonthlyDbToEarningsPerMonth(records);
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
@@ -94,7 +94,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             const data = AnalyticsService.convertMonthlyDbToEarningsOverTime(records);
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
@@ -112,7 +112,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             const expenses = AnalyticsService.convertMonthlyDbToEarningsPerMonth(records);
             const earnings = AnalyticsService.convertMonthlyDbToExpensePerMonth(records);
             const options = {
@@ -132,7 +132,7 @@ AnalyticsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            const records = await MonthlyService.getAllData(db, filter);
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
             const expenses = AnalyticsService.convertMonthlyDbToExpenseOverTime(records);
             const earnings = AnalyticsService.convertMonthlyDbToEarningsOverTime(records);
             const options = {

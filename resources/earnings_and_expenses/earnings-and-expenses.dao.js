@@ -1,14 +1,14 @@
 const DatabaseTable = require('../../utils/database/database_table.enum');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const DatabaseException = require('../../errors/database_exception');
-const MonthlyValidator = require('./monthly.validator');
+const EarningsAndExpensesValidator = require('./earnings-and-expenses.validator');
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
 const APIException = require('../../errors/api_exception');
 
-MonthlyDao = {
+EarningsAndExpensesDao = {
     createMonthlyData: async (db, body) => {
-        let dbData = MonthlyDao.getCreateData(body);
+        let dbData = EarningsAndExpensesDao.getCreateData(body);
         let columns = dbData.columns;
         let placeholders = dbData.placeholders;
         let values = dbData.values;
@@ -24,10 +24,10 @@ MonthlyDao = {
         }
     },
     updateMonthlyData: async(db, body) => {
-        let dbData = MonthlyDao.getUpdateData(body);
+        let dbData = EarningsAndExpensesDao.getUpdateData(body);
         let placeholders = dbData.placeholders;
         let values = dbData.values;
-        let sql = `UPDATE ${DatabaseTable.EarningsAndExpenses}\nSET ${placeholders}\nWHERE ${DatabaseColumns.MonthlyColumns.Id} = ?`;
+        let sql = `UPDATE ${DatabaseTable.EarningsAndExpenses}\nSET ${placeholders}\nWHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ?`;
         
         try {
             const result = await db.run(sql, values);
@@ -44,7 +44,7 @@ MonthlyDao = {
         }
     },
     getMonthlyDataById: async (db, id) => {
-        let sql = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
+        let sql = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ${id};`
         try {
             let data = await db.get(sql);
             console.log("done with sql get by id");
@@ -64,13 +64,13 @@ MonthlyDao = {
         let select = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses}`;
         let where = '';
         if(!!filters.startDate && !!filters.endDate) {
-            where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} >= '${filters.startDate}' AND ${DatabaseColumns.MonthlyColumns.FinanceDate} <= '${filters.endDate}'`;
+            where = `WHERE ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} >= '${filters.startDate}' AND ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} <= '${filters.endDate}'`;
         } else if(!!filters.startDate) {
-            where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} >= '${filters.startDate}'`;
+            where = `WHERE ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} >= '${filters.startDate}'`;
         } else if(!!filters.endDate) {
-            where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} <= '${filters.endDate}'`;
+            where = `WHERE ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} <= '${filters.endDate}'`;
         }
-        let order = `ORDER BY ${DatabaseColumns.MonthlyColumns.FinanceDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
+        let order = `ORDER BY ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
         console.log(sql);
         try {
@@ -81,7 +81,7 @@ MonthlyDao = {
         }
     },
     deleteMonthlyRecord: async (db, id) => {
-        let sql = `DELETE FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
+        let sql = `DELETE FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ${id};`
         try {
             let result = await db.run(sql);
             if(result === null || result === undefined || result.changes === 0) {
@@ -97,9 +97,9 @@ MonthlyDao = {
     },
     // DAO Helpers
     getCreateData: (body) => {
-        let columns = "(" + MonthlyValidator.getCreateColumns().join(",") + ")";
-        let placeholders = "(" + MonthlyValidator.getCreateColumns().map(c => '?').join(',') + ")";
-        let values = MonthlyValidator.getCreateColumns().map(c => {
+        let columns = "(" + EarningsAndExpensesValidator.getCreateColumns().join(",") + ")";
+        let placeholders = "(" + EarningsAndExpensesValidator.getCreateColumns().map(c => '?').join(',') + ")";
+        let values = EarningsAndExpensesValidator.getCreateColumns().map(c => {
             let key = Convert.snakeToCamel(c);
             if(c === 'finance_date') {
                 return body[key];
@@ -114,9 +114,9 @@ MonthlyDao = {
         return {columns, placeholders, values};
     },
     getUpdateData: (body) => {
-        let placeholders = MonthlyValidator.getCreateColumns().join(" = ?,\n");
+        let placeholders = EarningsAndExpensesValidator.getCreateColumns().join(" = ?,\n");
         placeholders = `${placeholders} = ?`; 
-        let values = MonthlyValidator.getCreateColumns().map(c => {
+        let values = EarningsAndExpensesValidator.getCreateColumns().map(c => {
             let key = Convert.snakeToCamel(c);
             if(c === 'finance_date') {
                 return body[key];
@@ -127,11 +127,11 @@ MonthlyDao = {
                 return Money.moneyToCents(body[key]);
             }
         });
-        values.push(body[Convert.snakeToCamel(DatabaseColumns.MonthlyColumns.Id)]);
+        values.push(body[Convert.snakeToCamel(DatabaseColumns.EarningsAndExpensesColumns.Id)]);
     
         return {placeholders, values};
     },
     
 }
 
-module.exports = MonthlyDao;
+module.exports = EarningsAndExpensesDao;

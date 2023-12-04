@@ -1,22 +1,22 @@
 const Database = require("../../db");
-const MonthlyDao = require("./monthly.dao");
-const MonthlyService = require("./monthly.service");
-const MonthlyValidator = require("../monthly/monthly.validator");
+const EarningsAndExpensesDao = require("./earnings-and-expenses.dao");
+const EarningsAndExpensesService = require("./earnings-and-expenses.service");
+const EarningsAndExpensesValidator = require("./earnings-and-expenses.validator");
 const APIException = require("../../errors/api_exception");
 const DocumentManager = require("../../utils/document-manager");
 const XL = require('excel4node');
 
 
-MonthlyController = {
+EarningsAndExpensesController = {
     createMonthlyData: async (req, res, next) => {
         try {
-            const bodyErrors = MonthlyValidator.validateCreateData(req.body);
+            const bodyErrors = EarningsAndExpensesValidator.validateCreateData(req.body);
             if(bodyErrors.length > 0) {
                 console.log(bodyErrors);
                 throw new APIException("Invalid request body", bodyErrors, 400);
             }
             const db = await Database.getDb();
-            const record = await MonthlyDao.createMonthlyData(db, req.body);
+            const record = await EarningsAndExpensesDao.createMonthlyData(db, req.body);
             console.log("Good to send 200");
             res.status(201).send(record);
         } catch(e) {
@@ -25,13 +25,13 @@ MonthlyController = {
     },
     updateMonthlyData: async (req, res, next) => {
         try {
-            const bodyErrors = MonthlyValidator.validateCreateData(req.body);
+            const bodyErrors = EarningsAndExpensesValidator.validateCreateData(req.body);
             if(bodyErrors.length > 0) {
                 console.log(bodyErrors);
                 throw new APIException("Invalid request body", bodyErrors, 400);
             }
             const db = await Database.getDb();
-            const record = await MonthlyDao.updateMonthlyData(db, req.body);
+            const record = await EarningsAndExpensesDao.updateMonthlyData(db, req.body);
             console.log("Good to send 200");
             res.status(200).send(record);
         } catch(e) {
@@ -42,8 +42,8 @@ MonthlyController = {
         try {
             const db = await Database.getDb();
             const id = parseInt(await req.params['id']);
-            const record = await MonthlyService.getMonthlyDataById(db, id);
-            const result = MonthlyService.convertMonthlyDbToJson(record);
+            const record = await EarningsAndExpensesService.getMonthlyDataById(db, id);
+            const result = EarningsAndExpensesService.convertMonthlyDbToJson(record);
             res.status(200).send(result);
         } catch(e) {
             next(e);
@@ -58,8 +58,8 @@ MonthlyController = {
                 endDate: req.query.endDate,
             }
             console.log(filter);
-            const records = await MonthlyService.getAllData(db, filter);
-            const result = records.map(r => MonthlyService.convertMonthlyDbToJson(r));
+            const records = await EarningsAndExpensesService.getAllData(db, filter);
+            const result = records.map(r => EarningsAndExpensesService.convertMonthlyDbToJson(r));
             res.status(200).send(result);
         } catch(e) {
             next(e);
@@ -68,9 +68,9 @@ MonthlyController = {
     getAllMonthlyDataAsSpreadsheet: async (req, res, next) => {
         try {
             const db = await Database.getDb();
-            const records = await MonthlyService.getAllData(db);
-            const sheetData = MonthlyService.convertMonthlyDbToSheet(records);
-            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Finances', MonthlyValidator.getCreateColumns(), sheetData);
+            const records = await EarningsAndExpensesService.getAllData(db);
+            const sheetData = EarningsAndExpensesService.convertMonthlyDbToSheet(records);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Finances', EarningsAndExpensesValidator.getCreateColumns(), sheetData);
             financeWorkbook.write('AllFinanceData.xlsx', res);
         } catch(e) {
             next(e);
@@ -79,7 +79,7 @@ MonthlyController = {
     deleteMonthlyRecord: async (req, res, next) => {
         try {
             const db = await Database.getDb();
-            const result = await MonthlyService.deleteMonthlyRecord(db, req.params['id']);
+            const result = await EarningsAndExpensesService.deleteMonthlyRecord(db, req.params['id']);
             res.status(200).send({status: 'success'});
         } catch(e) {
             next(e);
@@ -87,4 +87,4 @@ MonthlyController = {
     }
 }
 
-module.exports = MonthlyController;
+module.exports = EarningsAndExpensesController;

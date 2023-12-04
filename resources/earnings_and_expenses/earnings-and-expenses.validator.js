@@ -1,19 +1,19 @@
 const Convert = require('../../utils/snake_and_camel');
 const DatabaseColumns = require("../../utils/database/database_columns.enum");
-const COLUMNS = DatabaseColumns.MonthlyColumns;
+const COLUMNS = DatabaseColumns.EarningsAndExpensesColumns;
 
-MonthlyValidator = {
+EarningsAndExpensesValidator = {
     expenseColumns: [
         COLUMNS.Mortgage, COLUMNS.Utilities, COLUMNS.Insurance, 
         COLUMNS.CarPayment, COLUMNS.PropertyTax, COLUMNS.Taxes, COLUMNS.Groceries, COLUMNS.Entertainment, 
         COLUMNS.Gifts, COLUMNS.EatingOut, COLUMNS.Furniture, COLUMNS.Repairs, COLUMNS.Misc
     ],
     earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund],
-    getUpdateColumns: () => [COLUMNS.Id, ...MonthlyValidator.getCreateColumns()],
-    getCreateColumns: () => { return [COLUMNS.FinanceDate, ...MonthlyValidator.expenseColumns, ...MonthlyValidator.earningsColumns]; },
+    getUpdateColumns: () => [COLUMNS.Id, ...EarningsAndExpensesValidator.getCreateColumns()],
+    getCreateColumns: () => { return [COLUMNS.FinanceDate, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
     validateCreateData: (body) => {
         let errors = [];
-        MonthlyValidator.getCreateColumns().forEach(c => {
+        EarningsAndExpensesValidator.getCreateColumns().forEach(c => {
             let key = Convert.snakeToCamel(c);
             if(c === COLUMNS.FinanceDate) {
                 if(body[key] === undefined) {
@@ -41,4 +41,4 @@ MonthlyValidator = {
     
 }
 
-module.exports = MonthlyValidator;
+module.exports = EarningsAndExpensesValidator;

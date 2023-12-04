@@ -1,30 +1,30 @@
-const MonthlyDao = require('./monthly.dao');
-const MonthlyValidator = require('./monthly.validator');
+const EarningsAndExpensesDao = require('./earnings-and-expenses.dao');
+const EarningsAndExpensesValidator = require('./earnings-and-expenses.validator');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
 
 
-MonthlyService = {
+EarningsAndExpensesService = {
     updateMonthlyData: async(db, body) => {
-        return await MonthlyDao.updateMonthlyData(db, body);
+        return await EarningsAndExpensesDao.updateMonthlyData(db, body);
     },
     getMonthlyDataById: async(db, id) => {
-        return await MonthlyDao.getMonthlyDataById(db, id);
+        return await EarningsAndExpensesDao.getMonthlyDataById(db, id);
     },
     getAllData: async(db, filter) => {
-        const records = await MonthlyDao.getAllMonthlyData(db, filter);
+        const records = await EarningsAndExpensesDao.getAllMonthlyData(db, filter);
         return records;
     },
     deleteMonthlyRecord: async (db, id) => {
-        return await MonthlyDao.deleteMonthlyRecord(db, id);
+        return await EarningsAndExpensesDao.deleteMonthlyRecord(db, id);
     },
     // Helpers
     convertMonthlyDbToJson: (data) => {
         let rowAsJs = {};
         Object.entries(data).forEach(entry => {
             let [key, value] = entry;
-            if(key === DatabaseColumns.MonthlyColumns.FinanceDate || key === DatabaseColumns.MonthlyColumns.Id) {
+            if(key === DatabaseColumns.EarningsAndExpensesColumns.FinanceDate || key === DatabaseColumns.EarningsAndExpensesColumns.Id) {
                 rowAsJs[Convert.snakeToCamel(key)] = value;
             } else {
                 rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);
@@ -35,8 +35,8 @@ MonthlyService = {
     convertMonthlyDbToSheet: (data) => {
         return data.map(row => {
             let data = [];
-            MonthlyValidator.getCreateColumns().forEach(column => {
-                if(column === DatabaseColumns.MonthlyColumns.FinanceDate) {
+            EarningsAndExpensesValidator.getCreateColumns().forEach(column => {
+                if(column === DatabaseColumns.EarningsAndExpensesColumns.FinanceDate) {
                     data.push({type: 'String', value: row[column]});
                 } else {
                     data.push({type: 'Number', value: Money.centsToMoney(row[column])});
@@ -49,4 +49,4 @@ MonthlyService = {
     
 }
 
-module.exports = MonthlyService;
+module.exports = EarningsAndExpensesService;

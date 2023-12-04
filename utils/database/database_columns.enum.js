@@ -1,4 +1,4 @@
-const MonthlyColumns = {
+const EarningsAndExpensesColumns = {
     Id: 'id',
     FinanceDate: 'finance_date',
     Mortgage: 'mortgage',
@@ -42,4 +42,4 @@ const InvestmentsYearColumns = {
 }
 
 
-module.exports = {MonthlyColumns, InvestmentsColumns, InvestmentsYearColumns};
+module.exports = {EarningsAndExpensesColumns, InvestmentsColumns, InvestmentsYearColumns};
