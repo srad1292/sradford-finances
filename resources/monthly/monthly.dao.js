@@ -12,7 +12,7 @@ MonthlyDao = {
         let columns = dbData.columns;
         let placeholders = dbData.placeholders;
         let values = dbData.values;
-        let sql = `INSERT INTO ${DatabaseTable.monthly}${columns} VALUES${placeholders}`;
+        let sql = `INSERT INTO ${DatabaseTable.EarningsAndExpenses}${columns} VALUES${placeholders}`;
         
         console.log(dbData);
         try {
@@ -27,7 +27,7 @@ MonthlyDao = {
         let dbData = MonthlyDao.getUpdateData(body);
         let placeholders = dbData.placeholders;
         let values = dbData.values;
-        let sql = `UPDATE ${DatabaseTable.monthly}\nSET ${placeholders}\nWHERE ${DatabaseColumns.MonthlyColumns.Id} = ?`;
+        let sql = `UPDATE ${DatabaseTable.EarningsAndExpenses}\nSET ${placeholders}\nWHERE ${DatabaseColumns.MonthlyColumns.Id} = ?`;
         
         try {
             const result = await db.run(sql, values);
@@ -44,7 +44,7 @@ MonthlyDao = {
         }
     },
     getMonthlyDataById: async (db, id) => {
-        let sql = `SELECT * FROM ${DatabaseTable.monthly} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
+        let sql = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
         try {
             let data = await db.get(sql);
             console.log("done with sql get by id");
@@ -61,7 +61,7 @@ MonthlyDao = {
         }
     },
     getAllMonthlyData: async (db, filters = {}) => {
-        let select = `SELECT * FROM ${DatabaseTable.monthly}`;
+        let select = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses}`;
         let where = '';
         if(!!filters.startDate && !!filters.endDate) {
             where = `WHERE ${DatabaseColumns.MonthlyColumns.FinanceDate} >= '${filters.startDate}' AND ${DatabaseColumns.MonthlyColumns.FinanceDate} <= '${filters.endDate}'`;
@@ -81,7 +81,7 @@ MonthlyDao = {
         }
     },
     deleteMonthlyRecord: async (db, id) => {
-        let sql = `DELETE FROM ${DatabaseTable.monthly} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
+        let sql = `DELETE FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.MonthlyColumns.Id} = ${id};`
         try {
             let result = await db.run(sql);
             if(result === null || result === undefined || result.changes === 0) {

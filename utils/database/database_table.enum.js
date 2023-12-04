@@ -1,5 +1,5 @@
 const DatabaseTable = {
-    monthly: 'monthly',
+    EarningsAndExpenses: 'earnings_and_expenses',
     investments: 'investments'
 };
 

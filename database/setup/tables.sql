@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS monthly(
+CREATE TABLE IF NOT EXISTS earnings_and_expenses(
     id INTEGER PRIMARY KEY,
     finance_date TEXT NOT NULL,
     mortgage INTEGER DEFAULT 0,
