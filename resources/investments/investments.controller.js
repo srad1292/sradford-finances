@@ -23,6 +23,22 @@ InvestmentsController = {
             next(e);
         }
     },
+    bulkCreateInvestmentsData: async (req, res, next) => {
+        try {
+            const bodyErrors = InvestmentsValidator.validateBulkCreateData(req.body);
+            if(bodyErrors.length > 0) {
+                console.log(bodyErrors);
+                throw new APIException("Invalid request body", bodyErrors, 400);
+            }
+            const body = InvestmentsService.bulkCalculateFinal(req.body);
+            const db = await Database.getDb();
+            const result = await InvestmentsDao.bulkCreateInvestmentsData(db, body);
+            console.log("bulk insert done");
+            res.status(201).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     getRecordById: async(req, res, next) => {
         try {
             const db = await Database.getDb();

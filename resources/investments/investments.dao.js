@@ -6,6 +6,7 @@ const YearColumns = DatabaseColumns.InvestmentsYearColumns;
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
 const APIException = require('../../errors/api_exception');
+const DatabaseException = require('../../errors/database_exception');
 
 const InvestmentsDao = {
     createInvestmentsData: async (db, body) => {
@@ -20,6 +21,25 @@ const InvestmentsDao = {
             const runResult = await db.run(sql, values);
             return {id: runResult.lastID, ...body};
             // return {id: 1000, ...body};
+        } catch (e) {
+            throw new DatabaseException("Error creating investments data: " + e, 500);
+        }
+    },
+    bulkCreateInvestmentsData: async (db, body) => {
+        let dbData = InvestmentsDao.getBulkCreateData(body);
+        let columns = dbData.columns;
+        let placeholders = dbData.placeholders;
+        let values = dbData.bulkValues;
+        try {
+            let stmt = await db.prepare(`INSERT INTO ${DatabaseTable.investments}${columns} VALUES${placeholders}`);
+            let runResult;
+            let result = [];
+            for(let i=0; i<values.length; i++) {
+                runResult = await stmt.run(...values[i]);
+                result.push({id: runResult.lastID, ...body[i]});
+            }
+            await stmt.finalize();
+            return result;
         } catch (e) {
             throw new DatabaseException("Error creating investments data: " + e, 500);
         }
@@ -231,6 +251,27 @@ const InvestmentsDao = {
         });
     
         return {columns, placeholders, values};
+    },
+    getBulkCreateData: (body) => {
+        let columns = "(" + InvestmentsValidator.getCreateColumns().join(",") + ")";
+        let placeholders = "(" + InvestmentsValidator.getCreateColumns().map((c, i) => `?${i+1}`).join(',') + ")";
+        let bulkValues = [];
+        body.forEach(investment => {
+            let values = InvestmentsValidator.getCreateColumns().map(c => {
+                let key = Convert.snakeToCamel(c);
+                if(c === COLUMNS.RecordDate) {
+                    return investment[key];
+                } else {
+                    if(investment[key] === undefined) {
+                        return 0;
+                    }
+                    return Money.moneyToCents(investment[key]);
+                }
+            });
+            bulkValues.push(values);
+        });
+        return {columns, placeholders, bulkValues};
+
     },
     getUpdateData: (body) => {
         let placeholders = InvestmentsValidator.getCreateColumns().join(" = ?,\n");

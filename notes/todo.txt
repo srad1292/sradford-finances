@@ -12,6 +12,7 @@ Derive start and end date for graphs and display either in title or in dataset l
 
 * Investments: 
 Endpoints:
+  - Insert by firm -> i can do numbers from statement for each firm without manually needing to combine them
 
 - For spreadsheets and maybe for growth by time analytics -> 
     Add a new calculated value in response that is %change from previous period

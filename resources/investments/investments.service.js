@@ -59,6 +59,9 @@ const InvestmentsService = {
         body[COLUMNS.Final] = final;
         return body;
     },
+    bulkCalculateFinal: (body) => {
+        return body.map(record => InvestmentsService.calculateFinal(record));
+    },
     convertRecordToJson: (data) => {
         let rowAsJs = {};
         Object.entries(data).forEach(entry => {

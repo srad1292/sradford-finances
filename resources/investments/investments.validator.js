@@ -41,6 +41,16 @@ InvestmentsValidator = {
         });
         return errors;
     },
+    validateBulkCreateData: (body) => {
+        let errors = [];
+        body.forEach((record, idx) => {
+            let recordErrors = InvestmentsValidator.validateCreateData(record);
+            recordErrors.forEach(error => {
+                errors.push({index: idx, ...error});
+            });
+        });
+        return errors;
+    },
 }
 
 module.exports = InvestmentsValidator;
