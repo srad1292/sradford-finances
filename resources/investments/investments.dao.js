@@ -16,7 +16,7 @@ const InvestmentsDao = {
         let values = dbData.values;
         let sql = `INSERT INTO ${DatabaseTable.investments}${columns} VALUES${placeholders}`;
         
-        console.log(dbData);
+        // console.log(dbData);
         try {
             const runResult = await db.run(sql, values);
             return {id: runResult.lastID, ...body};
@@ -64,7 +64,7 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        console.log(sql);
+        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -127,7 +127,7 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        console.log(sql);
+        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -155,7 +155,7 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        console.log(sql);
+        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -183,7 +183,7 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        console.log(sql);
+        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -211,7 +211,7 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        console.log(sql);
+        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;

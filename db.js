@@ -14,9 +14,9 @@ async function initDb() {
 }
 
 async function getDb() {
-    console.log("In get db");
+    // console.log("In get db");
     if(db == undefined) {
-        console.log("Need to initialize db");
+        // console.log("Need to initialize db");
         await initDb();
     }
     return db;

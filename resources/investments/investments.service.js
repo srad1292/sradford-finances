@@ -62,6 +62,31 @@ const InvestmentsService = {
     bulkCalculateFinal: (body) => {
         return body.map(record => InvestmentsService.calculateFinal(record));
     },
+    combineFirms: (body) => {
+        const camelInitial = Convert.snakeToCamel(COLUMNS.Initial);
+        const camelContributions = Convert.snakeToCamel(COLUMNS.Contributions);
+        const camelGains = Convert.snakeToCamel(COLUMNS.Gains);
+        const camelWithdrawals = Convert.snakeToCamel(COLUMNS.Withdrawals);
+        let result = {
+            [camelInitial]: 0,
+            [camelContributions]: 0,
+            [camelGains]: 0,
+            [camelWithdrawals]: 0
+        };
+        body.forEach(firm => {
+            result[Convert.snakeToCamel(COLUMNS.RecordDate)] = firm[Convert.snakeToCamel(COLUMNS.RecordDate)];
+            result[camelInitial] += Money.moneyToCents(firm[camelInitial]);
+            result[camelContributions] += Money.moneyToCents(firm[camelContributions]);
+            result[camelGains] += Money.moneyToCents(firm[camelGains]);
+            result[camelWithdrawals] += Money.moneyToCents(firm[camelWithdrawals]);
+        });
+        
+        result[camelInitial] = Money.centsToMoney(result[camelInitial]);
+        result[camelContributions] = Money.centsToMoney(result[camelContributions]);
+        result[camelGains] = Money.centsToMoney(result[camelGains]);
+        result[camelWithdrawals] = Money.centsToMoney(result[camelWithdrawals]);
+        return result;
+    },
     convertRecordToJson: (data) => {
         let rowAsJs = {};
         Object.entries(data).forEach(entry => {
@@ -87,7 +112,6 @@ const InvestmentsService = {
         return rowAsJs;
     },
     convertToMonthlySheet: (data) => {
-        console.log(data[0]);
         return data.map(row => {
             let data = [];
             InvestmentsValidator.getCreateColumns().forEach(column => {

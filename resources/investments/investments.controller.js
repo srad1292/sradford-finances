@@ -11,13 +11,11 @@ InvestmentsController = {
         try {
             const bodyErrors = InvestmentsValidator.validateCreateData(req.body);
             if(bodyErrors.length > 0) {
-                console.log(bodyErrors);
                 throw new APIException("Invalid request body", bodyErrors, 400);
             }
             const body = InvestmentsService.calculateFinal(req.body);
             const db = await Database.getDb();
             const record = await InvestmentsDao.createInvestmentsData(db, body);
-            console.log("Good to send 200");
             res.status(201).send(record);
         } catch(e) {
             next(e);
@@ -27,14 +25,27 @@ InvestmentsController = {
         try {
             const bodyErrors = InvestmentsValidator.validateBulkCreateData(req.body);
             if(bodyErrors.length > 0) {
-                console.log(bodyErrors);
                 throw new APIException("Invalid request body", bodyErrors, 400);
             }
             const body = InvestmentsService.bulkCalculateFinal(req.body);
             const db = await Database.getDb();
             const result = await InvestmentsDao.bulkCreateInvestmentsData(db, body);
-            console.log("bulk insert done");
             res.status(201).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
+    createInvestmentsDataByFirm: async (req, res, next) => {
+        try {
+            const bodyErrors = InvestmentsValidator.validateCreateByFirm(req.body);
+            if(bodyErrors.length > 0) {
+                throw new APIException("Invalid request body", bodyErrors, 400);
+            }
+            const combined = InvestmentsService.combineFirms(req.body); 
+            const body = InvestmentsService.calculateFinal(combined);
+            const db = await Database.getDb();
+            const record = await InvestmentsDao.createInvestmentsData(db, body);
+            res.status(201).send(record);
         } catch(e) {
             next(e);
         }
@@ -58,7 +69,6 @@ InvestmentsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            console.log(filter);
             const records = await InvestmentsService.getAllRecords(db, filter);
             const result = records.map(r => InvestmentsService.convertRecordToJson(r));
             res.status(200).send(result);
@@ -84,13 +94,11 @@ InvestmentsController = {
         try {
             const bodyErrors = InvestmentsValidator.validateCreateData(req.body);
             if(bodyErrors.length > 0) {
-                console.log(bodyErrors);
                 throw new APIException("Invalid request body", bodyErrors, 400);
             }
             const body = InvestmentsService.calculateFinal(req.body);
             const db = await Database.getDb();
             const record = await InvestmentsService.updateRecord(db, body);
-            console.log("Good to send 200");
             res.status(200).send(record);
         } catch(e) {
             next(e);
@@ -147,7 +155,6 @@ InvestmentsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            console.log(filter);
             const records = await InvestmentsService.getNetContributionsVsGainsByMonth(db, filter);
             const result = records.map(r => InvestmentsService.convertRecordToJson(r));
             res.status(200).send(result);
@@ -178,7 +185,6 @@ InvestmentsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            console.log(filter);
             const records = await InvestmentsService.getNetContributionsByMonth(db, filter);
             const result = records.map(r => InvestmentsService.convertRecordToJson(r));
             res.status(200).send(result);
@@ -237,7 +243,6 @@ InvestmentsController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            console.log(filter);
             const records = await InvestmentsService.getGrowthByMonth(db, filter);
             const result = records.map(r => InvestmentsService.convertRecordToJson(r));
 

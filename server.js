@@ -52,7 +52,7 @@ function setupRoutes() {
 
   app.post('/investments', InvestmentsController.createInvestmentsData);
   app.post('/investments/bulk', InvestmentsController.bulkCreateInvestmentsData);
-  // app.post('/investments/firm', InvestmentsController.createInvestmentsData);
+  app.post('/investments/firm', InvestmentsController.createInvestmentsDataByFirm);
   app.get('/investments', InvestmentsController.getAllRecords);
   app.put('/investments', InvestmentsController.updateRecord);
   app.get('/investments/spreadsheet/month', InvestmentsController.getMonthlySpreadsheet);

@@ -51,6 +51,34 @@ InvestmentsValidator = {
         });
         return errors;
     },
+    validateCreateByFirm: (body) => {
+        let errors = [];
+        let recordDate;
+        let camelDate = Convert.snakeToCamel(COLUMNS.RecordDate);
+        body.forEach((record, idx) => {
+            let firm = record['firm'];
+            if(firm === undefined) {
+                errors.push({index: idx, property: 'firm', error: 'firm is required'});
+            }
+
+            if(idx === 0) { 
+                recordDate = record[camelDate];
+            }
+            else if(record[camelDate] !== recordDate) {
+                errors.push({index: idx, firm: !!firm ? firm : 'unknown', property: camelDate, error: 'Record date should be the same for each firm'});
+            }
+
+            // if(idx !== 0) {
+            //     console.log(`record: ${record[COLUMNS.RecordDate]} -- date: ${recordDate} -- not eq ${record[COLUMNS.RecordDate] !== recordDate}`);
+            // }
+
+            let recordErrors = InvestmentsValidator.validateCreateData(record);
+            recordErrors.forEach(error => {
+                errors.push({index: idx, firm: !!firm ? firm : 'unknown', ...error});
+            });
+        });
+        return errors;
+    },
 }
 
 module.exports = InvestmentsValidator;
