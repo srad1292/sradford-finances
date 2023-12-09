@@ -1,3 +1,5 @@
 node_modules
 spreadsheets
 resources/analytics/img
+development.env
+production.env

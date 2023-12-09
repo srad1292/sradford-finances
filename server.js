@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const config =  require('./config.js');
 const Database = require('./db');
 const APIException = require('./errors/api_exception');
 const DatabaseException = require('./errors/database_exception');
@@ -10,10 +11,11 @@ const AnalyticsInvestmentsController = require("./resources/analytics/analytics-
 const InvestmentsController = require("./resources/investments/investments.controller");
 
 const app = express();
-const port = 3001;
+const port = config.PORT;
+const host = config.HOST;
 
 async function setup() {
-  await Database.initDb();
+  await Database.initDb(config.DB_PATH);
   setupMiddleware();
   setupRoutes();
   setupErrorHandler();
@@ -127,7 +129,7 @@ function financeErrorHandler(err, req, res, next) {
 }
 
 function startListening() {
-  app.listen(port, () => {
+  app.listen(port, host, () => {
     console.log(`App running on port ${port}.`)
   });
 }

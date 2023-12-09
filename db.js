@@ -1,20 +1,20 @@
 const sqlite3 = require('sqlite3').verbose();
 const open = require('sqlite').open;
 let db;
-const isTest = true;
+let DB_PATH = '';
 
-async function initDb() {
+async function initDb(path = '') {
     if(db === undefined) { 
-        let fileName = isTest ? "./database/test/finances.db" : "./database/prod/finances.db";
+        DB_PATH = DB_PATH === '' ? path : '';
         db = await open({
-            filename: fileName,
+            filename: DB_PATH,
             driver: sqlite3.cached.Database
         });
     }
 }
 
 async function getDb() {
-    // console.log("In get db");
+    console.log("In get db");
     if(db == undefined) {
         // console.log("Need to initialize db");
         await initDb();
