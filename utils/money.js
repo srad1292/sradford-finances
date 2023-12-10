@@ -23,4 +23,8 @@ function centsToMoney(cents) {
     return isNegative ? parseFloat(`-${moneyStr}`) : parseFloat(moneyStr);
 }
 
-module.exports = {moneyToCents, centsToMoney};
+function calculatePercentChange(latest, oldest) {
+    return ((latest-oldest) / oldest * 100).toFixed(2);
+}
+
+module.exports = {moneyToCents, centsToMoney, calculatePercentChange};

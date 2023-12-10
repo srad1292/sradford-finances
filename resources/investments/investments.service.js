@@ -112,29 +112,35 @@ const InvestmentsService = {
         return rowAsJs;
     },
     convertToMonthlySheet: (data) => {
-        return data.map(row => {
-            let data = [];
-            InvestmentsValidator.getCreateColumns().forEach(column => {
+        return data.map((row, rowIndex) => {
+            let outputRow = [];
+            InvestmentsValidator.getMonthlyDocumentColumns().forEach(column => {
                 if(column === COLUMNS.RecordDate) {
-                    data.push({type: 'String', value: row[column]});
+                    outputRow.push({type: 'String', value: row[column]});
+                } else if(column === COLUMNS.PercentChange) {
+                    let value = rowIndex === 0 ? '' : `${Money.calculatePercentChange(row[COLUMNS.Final], data[rowIndex-1][COLUMNS.Final])}%`;
+                    outputRow.push({type: 'String', value});
                 } else {
-                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
+                    outputRow.push({type: 'Number', value: Money.centsToMoney(row[column])});
                 }
             });
-            return data;
+            return outputRow;
         });
     },
     convertToYearlySheet: (data) => {
-        return data.map(row => {
-            let data = [];
-            InvestmentsValidator.getYearlyColumns().forEach(column => {
+        return data.map((row, rowIndex) => {
+            let outputRow = [];
+            InvestmentsValidator.getYearlyDocumentColumns().forEach(column => {
                 if(column === YearColumns.Year) {
-                    data.push({type: 'String', value: row[column]});
+                    outputRow.push({type: 'String', value: row[column]});
+                } else if(column === COLUMNS.PercentChange) {
+                    let value = rowIndex === 0 ? '' : `${Money.calculatePercentChange(row[COLUMNS.Final], data[rowIndex-1][COLUMNS.Final])}%`;
+                    outputRow.push({type: 'String', value});
                 } else {
-                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
+                    outputRow.push({type: 'Number', value: Money.centsToMoney(row[column])});
                 }
             });
-            return data;
+            return outputRow;
         });
     },
     

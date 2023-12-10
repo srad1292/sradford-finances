@@ -125,7 +125,7 @@ InvestmentsController = {
             const records = await InvestmentsService.getAllRecords(db, filter);
             const sheetData = InvestmentsService.convertToMonthlySheet(records);
             // res.status(200).send(sheetData);
-            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Monthly-Investments', InvestmentsValidator.getCreateColumns(), sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Monthly-Investments', InvestmentsValidator.getMonthlyDocumentColumns(), sheetData);
             financeWorkbook.write('Monthly-Investments.xlsx', res);
         } catch(e) {
             next(e);
@@ -140,7 +140,7 @@ InvestmentsController = {
             }
             const records = await InvestmentsService.getByYear(db, filter);
             const sheetData = InvestmentsService.convertToYearlySheet(records);
-            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Yearly-Investments', InvestmentsValidator.getYearlyColumns(), sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Yearly-Investments', InvestmentsValidator.getYearlyDocumentColumns(), sheetData);
             financeWorkbook.write('Yearly-Investments.xlsx', res);
         } catch(e) {
             next(e);

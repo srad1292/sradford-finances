@@ -10,8 +10,11 @@ InvestmentsValidator = {
     getCreateColumns: () => {
         return [...InvestmentsValidator.givenColumns, ...InvestmentsValidator.derivedColumns];
     },
-    getYearlyColumns: () => {
-        let result = InvestmentsValidator.getCreateColumns();
+    getMonthlyDocumentColumns: () => {
+        return [...InvestmentsValidator.getCreateColumns(), COLUMNS.PercentChange];
+    },
+    getYearlyDocumentColumns: () => {
+        let result = [...InvestmentsValidator.getCreateColumns(), COLUMNS.PercentChange];
         result[0] = YearColumns.Year;
         return result;
     },
