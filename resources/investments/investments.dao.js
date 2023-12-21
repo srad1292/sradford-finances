@@ -82,7 +82,8 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        // console.log(sql);
+        console.log("Investments by year");
+        console.log(sql);
         let data = await db.all(sql);
         // console.log(data);
         return data;
@@ -229,6 +230,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
+        // console.log("Investments by year");
         // console.log(sql);
         let data = await db.all(sql);
         // console.log(data);

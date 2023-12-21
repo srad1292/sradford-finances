@@ -1,6 +1,7 @@
 const EarningsAndExpensesDao = require('./earnings-and-expenses.dao');
 const EarningsAndExpensesValidator = require('./earnings-and-expenses.validator');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
+const COLUMNS = DatabaseColumns.EarningsAndExpensesColumns;
 const Convert = require('../../utils/snake_and_camel');
 const Money = require('../../utils/money');
 
@@ -16,6 +17,18 @@ EarningsAndExpensesService = {
         const records = await EarningsAndExpensesDao.getAllMonthlyData(db, filter);
         return records;
     },
+    getByYear: async(db, filter) => {
+        const records = await EarningsAndExpensesDao.getByYear(db, filter);
+        return records;
+    },
+    getExpensesByYear: async(db, filter) => {
+        const records = await EarningsAndExpensesDao.getExpensesByYear(db, filter);
+        return records;
+    },
+    getEarningsByYear: async(db, filter) => {
+        const records = await EarningsAndExpensesDao.getEarningsByYear(db, filter);
+        return records;
+    },
     deleteMonthlyRecord: async (db, id) => {
         return await EarningsAndExpensesDao.deleteMonthlyRecord(db, id);
     },
@@ -25,6 +38,18 @@ EarningsAndExpensesService = {
         Object.entries(data).forEach(entry => {
             let [key, value] = entry;
             if(key === DatabaseColumns.EarningsAndExpensesColumns.FinanceDate || key === DatabaseColumns.EarningsAndExpensesColumns.Id) {
+                rowAsJs[Convert.snakeToCamel(key)] = value;
+            } else {
+                rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);
+            }
+        });
+        return rowAsJs;
+    },
+    convertYearRecordToJson: (data) => {
+        let rowAsJs = {};
+        Object.entries(data).forEach(entry => {
+            let [key, value] = entry;
+            if(key === COLUMNS.Year) {
                 rowAsJs[Convert.snakeToCamel(key)] = value;
             } else {
                 rowAsJs[Convert.snakeToCamel(key)] = Money.centsToMoney(value);

@@ -17,6 +17,9 @@ const EarningsAndExpensesColumns = {
     Salary: 'salary',
     Bonus: 'bonus',
     TaxRefund: 'tax_refund',
+
+    // Not in database
+    Year: 'year',
 }
 
 const InvestmentsColumns = {

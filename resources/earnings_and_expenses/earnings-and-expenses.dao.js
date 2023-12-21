@@ -1,5 +1,6 @@
 const DatabaseTable = require('../../utils/database/database_table.enum');
 const DatabaseColumns = require('../../utils/database/database_columns.enum');
+const COLUMNS = DatabaseColumns.EarningsAndExpensesColumns;
 const DatabaseException = require('../../errors/database_exception');
 const EarningsAndExpensesValidator = require('./earnings-and-expenses.validator');
 const Convert = require('../../utils/snake_and_camel');
@@ -80,6 +81,62 @@ EarningsAndExpensesDao = {
             throw new DatabaseException("Error getting monthly data: " + e, 500);
         }
     },
+    getByYear: async(db, filters = {}) => {
+        let innerSelectValues = EarningsAndExpensesValidator.getValueColumns().map(c => `SUM (${c}) AS total_${c}`);
+        let outerSelectValues = EarningsAndExpensesValidator.getValueColumns().map(c => `total_${c} AS ${c}`);
+
+        let sql = `SELECT DISTINCT (${COLUMNS.Year}) ${COLUMNS.Year}, ${outerSelectValues.join(', ')} 
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.FinanceDate}) AS ${COLUMNS.Year}, ${innerSelectValues.join(", ")}
+          FROM ${DatabaseTable.EarningsAndExpenses}
+          ${EarningsAndExpensesDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${COLUMNS.Year}
+          HAVING ${COLUMNS.FinanceDate} = MIN(${COLUMNS.FinanceDate})
+        ) AS subquery
+        ORDER BY ${COLUMNS.Year};`
+        console.log("Earnings and invest get by year");
+        console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
+    },
+    getExpensesByYear: async(db, filters = {}) => {
+        let innerSelectValues = EarningsAndExpensesValidator.expenseColumns.map(c => `SUM (${c}) AS total_${c}`);
+        let outerSelectValues = EarningsAndExpensesValidator.expenseColumns.map(c => `total_${c} AS ${c}`);
+
+        let sql = `SELECT DISTINCT (${COLUMNS.Year}) ${COLUMNS.Year}, ${outerSelectValues.join(', ')} 
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.FinanceDate}) AS ${COLUMNS.Year}, ${innerSelectValues.join(", ")}
+          FROM ${DatabaseTable.EarningsAndExpenses}
+          ${EarningsAndExpensesDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${COLUMNS.Year}
+          HAVING ${COLUMNS.FinanceDate} = MIN(${COLUMNS.FinanceDate})
+        ) AS subquery
+        ORDER BY ${COLUMNS.Year};`
+        // console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
+    },
+    getEarningsByYear: async(db, filters = {}) => {
+        let innerSelectValues = EarningsAndExpensesValidator.earningsColumns.map(c => `SUM (${c}) AS total_${c}`);
+        let outerSelectValues = EarningsAndExpensesValidator.earningsColumns.map(c => `total_${c} AS ${c}`);
+
+        let sql = `SELECT DISTINCT (${COLUMNS.Year}) ${COLUMNS.Year}, ${outerSelectValues.join(', ')} 
+        FROM (
+          SELECT strftime ('%Y', ${COLUMNS.FinanceDate}) AS ${COLUMNS.Year}, ${innerSelectValues.join(", ")}
+          FROM ${DatabaseTable.EarningsAndExpenses}
+          ${EarningsAndExpensesDao.buildWhereClauseWithYears(filters)}
+          GROUP BY ${COLUMNS.Year}
+          HAVING ${COLUMNS.FinanceDate} = MIN(${COLUMNS.FinanceDate})
+        ) AS subquery
+        ORDER BY ${COLUMNS.Year};`
+        // console.log(sql);
+        let data = await db.all(sql);
+        // console.log(data);
+        return data;
+    },
+
     deleteMonthlyRecord: async (db, id) => {
         let sql = `DELETE FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ${id};`
         try {
@@ -130,6 +187,17 @@ EarningsAndExpensesDao = {
         values.push(body[Convert.snakeToCamel(DatabaseColumns.EarningsAndExpensesColumns.Id)]);
     
         return {placeholders, values};
+    },
+    buildWhereClauseWithYears: (filters = {}) => {
+        let where = '';
+        if(!!filters.from && !!filters.to) {
+            where = `WHERE ${COLUMNS.Year} >= '${filters.from}' AND ${COLUMNS.Year} <= '${filters.to}'`;
+        } else if(!!filters.from) {
+            where = `WHERE ${COLUMNS.Year} >= '${filters.from}'`;
+        } else if(!!filters.to) {
+            where = `WHERE ${COLUMNS.Year} <= '${filters.to}'`;
+        }
+        return where;
     },
     
 }

@@ -65,6 +65,48 @@ EarningsAndExpensesController = {
             next(e);
         }
     },
+    getByYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getByYear(db, filter);
+            const result = records.map(r => EarningsAndExpensesService.convertYearRecordToJson(r));
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getExpensesByYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getExpensesByYear(db, filter);
+            const result = records.map(r => EarningsAndExpensesService.convertYearRecordToJson(r));
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getEarningsByYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getEarningsByYear(db, filter);
+            const result = records.map(r => EarningsAndExpensesService.convertYearRecordToJson(r));
+            res.status(200).send(result);
+        } catch(e) {
+            next(e);
+        }
+    },
     getAllMonthlyDataAsSpreadsheet: async (req, res, next) => {
         try {
             const db = await Database.getDb();

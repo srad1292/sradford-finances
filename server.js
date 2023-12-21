@@ -74,6 +74,9 @@ function setupRoutes() {
   app.post('/earnings-and-expenses', EarningsAndExpensesController.createMonthlyData);
   app.put('/earnings-and-expenses', EarningsAndExpensesController.updateMonthlyData);
   app.get('/earnings-and-expenses', EarningsAndExpensesController.getAllMonthlyData);
+  app.get('/earnings-and-expenses/year', EarningsAndExpensesController.getByYear);
+  app.get('/earnings-and-expenses/expenses/year', EarningsAndExpensesController.getExpensesByYear);
+  app.get('/earnings-and-expenses/earnings/year', EarningsAndExpensesController.getEarningsByYear);
   app.get('/earnings-and-expenses/spreadsheet', EarningsAndExpensesController.getAllMonthlyDataAsSpreadsheet);
   app.get('/earnings-and-expenses/:id', EarningsAndExpensesController.getMonthlyDataById);
   app.delete('/earnings-and-expenses/:id', EarningsAndExpensesController.deleteMonthlyRecord);
