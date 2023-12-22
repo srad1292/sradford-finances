@@ -51,6 +51,24 @@ AnalyticsController = {
             next(e);
         }
     },
+    getExpensesPerYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getExpensesByYear(db, filter);
+            const expenses = AnalyticsService.convertToExpensesPerYear(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+            };
+            const config = ChartService.createVerticalBarChartConfig(expenses, "Expenses Per Year", options);
+            AnalyticsController.createAndSendImage(config, "expenses-by-year.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
     getExpensesOverTime: async(req, res, next) => {
         try {
             const db = await Database.getDb();
@@ -83,6 +101,24 @@ AnalyticsController = {
             };
             const config = ChartService.createVerticalBarChartConfig(data, "Earnings By Month", options);
             AnalyticsController.createAndSendImage(config, "earnings-by-month.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getEarningsPerYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getEarningsByYear(db, filter);
+            const earnings = AnalyticsService.convertToEarningsPerYear(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+            };
+            const config = ChartService.createVerticalBarChartConfig(earnings, "Earnings Per Year", options);
+            AnalyticsController.createAndSendImage(config, "earnings-by-year.png", res);
         } catch(e) {
             next(e);
         }
@@ -121,6 +157,26 @@ AnalyticsController = {
             };
             const config = ChartService.createDoubleVerticalBarChartConfig([{label: "Earnings", data: earnings},{label: "Expenses", data: expenses}], "Earnings vs Expenses Per Month", options);
             AnalyticsController.createAndSendImage(config, "earnings-vs-expenses-per-month.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getEarningsVsExpensesByYear: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getByYear(db, filter);
+            const earnings = AnalyticsService.convertToEarningsPerYear(records);
+            const expenses = AnalyticsService.convertToExpensesPerYear(records);
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+                showLegend: true,
+            };
+            const config = ChartService.createDoubleVerticalBarChartConfig([{label: "Earnings", data: earnings},{label: "Expenses", data: expenses}], "Earnings vs Expenses Per Year", options);
+            AnalyticsController.createAndSendImage(config, "earnings-vs-expenses-per-year.png", res);
         } catch(e) {
             next(e);
         }

@@ -43,6 +43,26 @@ AnalyticsService = {
         return result;
         
     },
+    convertToExpensesPerYear: (data) => {
+        let result = [];
+        
+        for(let row = 0; row < data.length; row++) {
+            let sum = 0;
+            EarningsAndExpensesValidator.expenseColumns.forEach((c, i) => {
+                if(!!data[row][c]) {
+                    sum += data[row][c];
+                }
+            });
+
+            sum = Money.centsToMoney(sum);
+            result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.Year], value: sum});
+        }
+
+        // console.log("Converted to expenses");
+        // console.log(result);
+        return result;
+        
+    },
     convertMonthlyDbToExpenseOverTime: (data) => {
         let result = [];
 
@@ -75,6 +95,26 @@ AnalyticsService = {
 
             sum = Money.centsToMoney(sum);
             result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.FinanceDate], value: sum});
+        }
+
+        // console.log("Converted to expenses");
+        // console.log(result);
+        return result;
+        
+    },
+    convertToEarningsPerYear: (data) => {
+        let result = [];
+        
+        for(let row = 0; row < data.length; row++) {
+            let sum = 0;
+            EarningsAndExpensesValidator.earningsColumns.forEach((c, i) => {
+                if(!!data[row][c]) {
+                    sum += data[row][c];
+                }
+            });
+
+            sum = Money.centsToMoney(sum);
+            result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.Year], value: sum});
         }
 
         // console.log("Converted to expenses");
