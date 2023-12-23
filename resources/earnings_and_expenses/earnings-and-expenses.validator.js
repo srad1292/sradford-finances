@@ -11,6 +11,7 @@ EarningsAndExpensesValidator = {
     earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund],
     getUpdateColumns: () => [COLUMNS.Id, ...EarningsAndExpensesValidator.getCreateColumns()],
     getCreateColumns: () => { return [COLUMNS.FinanceDate, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
+    getYearlySheetColumns: () => { return [COLUMNS.Year, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
     getValueColumns: () => { return [...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
     validateCreateData: (body) => {
         let errors = [];

@@ -63,9 +63,9 @@ AnalyticsService = {
         return result;
         
     },
-    convertMonthlyDbToExpenseOverTime: (data) => {
+    convertMonthlyDbToExpenseOverTime: (data, period = 'month') => {
         let result = [];
-
+        let dateColumn = period === 'month' ? DatabaseColumns.EarningsAndExpensesColumns.FinanceDate : DatabaseColumns.EarningsAndExpensesColumns.Year;
         let sum = 0;
         for(let row = 0; row < data.length; row++) {
             EarningsAndExpensesValidator.expenseColumns.forEach((c, i) => {
@@ -74,7 +74,7 @@ AnalyticsService = {
                 }
             });
 
-            result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.FinanceDate], value: Money.centsToMoney(sum)});
+            result.push({label: data[row][dateColumn], value: Money.centsToMoney(sum)});
         }
 
         // console.log("Converted to expenses");
@@ -122,9 +122,9 @@ AnalyticsService = {
         return result;
         
     },
-    convertMonthlyDbToEarningsOverTime: (data) => {
+    convertMonthlyDbToEarningsOverTime: (data, period = 'month') => {
         let result = [];
-
+        let dateColumn = period === 'month' ? DatabaseColumns.EarningsAndExpensesColumns.FinanceDate : DatabaseColumns.EarningsAndExpensesColumns.Year;
         let sum = 0;
         for(let row = 0; row < data.length; row++) {
             EarningsAndExpensesValidator.earningsColumns.forEach((c, i) => {
@@ -133,7 +133,7 @@ AnalyticsService = {
                 }
             });
 
-            result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.FinanceDate], value: Money.centsToMoney(sum)});
+            result.push({label: data[row][dateColumn], value: Money.centsToMoney(sum)});
         }
 
         // console.log("Converted to expenses");

@@ -33,6 +33,7 @@ function setupRoutes() {
   app.get('/analytics/earnings-per-year', AnalyticsController.getEarningsPerYear);
   app.get('/analytics/earnings-over-time', AnalyticsController.getEarningsOverTime);
   app.get('/analytics/earnings-vs-expenses-over-time', AnalyticsController.getEarningsVsExpensesOverTime);
+  app.get('/analytics/earnings-vs-expenses-over-time-year', AnalyticsController.getEarningsVsExpensesOverTimeYears);
   app.get('/analytics/earnings-vs-expenses-per-month', AnalyticsController.getEarningsVsExpensesByMonth);
   app.get('/analytics/earnings-vs-expenses-per-year', AnalyticsController.getEarningsVsExpensesByYear);
   app.get('/analytics/expenses-by-type', AnalyticsController.getExpensesByType);
@@ -81,6 +82,7 @@ function setupRoutes() {
   app.get('/earnings-and-expenses/expenses/year', EarningsAndExpensesController.getExpensesByYear);
   app.get('/earnings-and-expenses/earnings/year', EarningsAndExpensesController.getEarningsByYear);
   app.get('/earnings-and-expenses/spreadsheet', EarningsAndExpensesController.getAllMonthlyDataAsSpreadsheet);
+  app.get('/earnings-and-expenses/spreadsheet/year', EarningsAndExpensesController.getByYearAsSpreadsheet);
   app.get('/earnings-and-expenses/:id', EarningsAndExpensesController.getMonthlyDataById);
   app.delete('/earnings-and-expenses/:id', EarningsAndExpensesController.deleteMonthlyRecord);
 

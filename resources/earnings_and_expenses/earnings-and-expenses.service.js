@@ -70,6 +70,19 @@ EarningsAndExpensesService = {
             return data;
         });
     },
+    convertToYearlySheet: (data) => {
+        return data.map(row => {
+            let data = [];
+            EarningsAndExpensesValidator.getYearlySheetColumns().forEach(column => {
+                if(column === DatabaseColumns.EarningsAndExpensesColumns.Year) {
+                    data.push({type: 'String', value: row[column]});
+                } else {
+                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
+                }
+            });
+            return data;
+        });
+    },
     
     
 }

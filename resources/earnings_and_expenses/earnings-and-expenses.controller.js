@@ -112,8 +112,23 @@ EarningsAndExpensesController = {
             const db = await Database.getDb();
             const records = await EarningsAndExpensesService.getAllData(db);
             const sheetData = EarningsAndExpensesService.convertMonthlyDbToSheet(records);
-            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Finances', EarningsAndExpensesValidator.getCreateColumns(), sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Earnings-and-expenses-monthly', EarningsAndExpensesValidator.getCreateColumns(), sheetData);
             financeWorkbook.write('AllFinanceData.xlsx', res);
+        } catch(e) {
+            next(e);
+        }
+    },
+    getByYearAsSpreadsheet: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getByYear(db, filter);
+            const result = EarningsAndExpensesService.convertToYearlySheet(records);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Earnings-and-expenses-yearly', EarningsAndExpensesValidator.getYearlySheetColumns(), result);
+            financeWorkbook.write('AllFinanceDataYearly.xlsx', res);
         } catch(e) {
             next(e);
         }

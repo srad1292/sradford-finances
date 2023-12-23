@@ -181,6 +181,26 @@ AnalyticsController = {
             next(e);
         }
     },
+    getEarningsVsExpensesOverTimeYears: async(req, res, next) => {
+        try {
+            const db = await Database.getDb();
+            const filter = {
+                from: req.query.from,
+                to: req.query.to
+            }
+            const records = await EarningsAndExpensesService.getByYear(db, filter);
+            const expenses = AnalyticsService.convertMonthlyDbToExpenseOverTime(records, 'year');
+            const earnings = AnalyticsService.convertMonthlyDbToEarningsOverTime(records, 'year');
+            const options = {
+                mono: req.query.mono === 'false' ? false : true,
+                showLegend: true,
+            };
+            const config = ChartService.createLineConfig([{label: "Earnings", data: earnings},{label: "Expenses", data: expenses}], "Total Earnings vs Expenses Over Years", options);
+            AnalyticsController.createAndSendImage(config, "total-earnings-vs-expenses-by-year.png", res);
+        } catch(e) {
+            next(e);
+        }
+    },
     getEarningsVsExpensesOverTime: async(req, res, next) => {
         try {
             const db = await Database.getDb();
