@@ -29,3 +29,11 @@ withdrawals INTEGER DEFAULT 0,
 final INTEGER DEFAULT 0
 );
 
+ALTER TABLE earnings_and_expenses ADD COLUMN hoa INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN clothes INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN vacation INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN lodging INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN gas INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN vet INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN medical INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN rewards_spent INTEGER DEFAULT 0;

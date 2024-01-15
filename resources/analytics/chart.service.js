@@ -72,8 +72,8 @@ ChartService = {
                     return {
                         label: dataset.label,
                         data: dataset.data,
-                        backgroundColor: i === 0 ? ChartService.gray : ChartService.basicColors[i-1],
-                        borderColor: i === 0 ? ChartService.gray : ChartService.basicColors[i-1],
+                        backgroundColor: i === 0 ? ChartService.gray : i < ChartService.basicColors.length ? ChartService.basicColors[i-1] : ChartService.getRandomColor(),
+                        borderColor: i === 0 ? ChartService.gray : i < ChartService.basicColors.length ? ChartService.basicColors[i-1] : ChartService.getRandomColor(),
                     };
                 }),
             },
@@ -108,8 +108,8 @@ ChartService = {
                     return {
                         label: dataset.label,
                         data: dataset.data.map(i => i.value),
-                        backgroundColor: ChartService.basicColors[i],
-                        borderColor: ChartService.basicColors[i],
+                        backgroundColor: i < ChartService.basicColors.length ? ChartService.basicColors[i] : ChartService.getRandomColor(),
+                        borderColor: i < ChartService.basicColors.length ? ChartService.basicColors[i] : ChartService.getRandomColor(),
                     };
                 }),
             },
@@ -258,11 +258,15 @@ ChartService = {
             if(i < ChartService.basicColors.length) {
                 result.push(ChartService.basicColors[i]);
             } else {
-                result.push(randomBetween(0, 207), randomBetween(0, 207), randomBetween(0, 207));
+                result.push(ChartService.getRandomColor());
             }
         }
         return result;
     },
+    getRandomColor: () => {
+      const randomBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+      return `rgb(${randomBetween(0, 207)}, ${randomBetween(0, 207)}, ${randomBetween(0, 207)})`;  
+    }
 }
 
 

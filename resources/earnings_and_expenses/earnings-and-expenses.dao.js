@@ -45,7 +45,8 @@ EarningsAndExpensesDao = {
         }
     },
     getMonthlyDataById: async (db, id) => {
-        let sql = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ${id};`
+        let colQuery = EarningsAndExpensesValidator.getUpdateColumns().join(", ");
+        let sql = `SELECT ${colQuery} FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ${id};`
         try {
             let data = await db.get(sql);
             console.log("done with sql get by id");
@@ -62,7 +63,8 @@ EarningsAndExpensesDao = {
         }
     },
     getAllMonthlyData: async (db, filters = {}) => {
-        let select = `SELECT * FROM ${DatabaseTable.EarningsAndExpenses}`;
+        let colQuery = EarningsAndExpensesValidator.getUpdateColumns().join(", ");
+        let select = `SELECT ${colQuery} FROM ${DatabaseTable.EarningsAndExpenses}`;
         let where = '';
         if(!!filters.startDate && !!filters.endDate) {
             where = `WHERE ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} >= '${filters.startDate}' AND ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} <= '${filters.endDate}'`;
