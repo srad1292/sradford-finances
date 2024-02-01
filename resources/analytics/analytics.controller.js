@@ -149,8 +149,8 @@ AnalyticsController = {
                 endDate: req.query.endDate,
             }
             const records = await EarningsAndExpensesService.getAllData(db, filter);
-            const expenses = AnalyticsService.convertMonthlyDbToEarningsPerMonth(records);
-            const earnings = AnalyticsService.convertMonthlyDbToExpensePerMonth(records);
+            const earnings = AnalyticsService.convertMonthlyDbToEarningsPerMonth(records);
+            const expenses = AnalyticsService.convertMonthlyDbToExpensePerMonth(records);
             const options = {
                 mono: req.query.mono === 'false' ? false : true,
                 showLegend: true,

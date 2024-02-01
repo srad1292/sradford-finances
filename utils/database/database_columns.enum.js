@@ -14,6 +14,8 @@ const EarningsAndExpensesColumns = {
     Gifts: 'gifts',
     EatingOut: 'eating_out',
     Clothes: 'clothes',
+    HomeNeeds: 'home_needs',
+    KitchenNeeds: 'kitchen_needs',
     Furniture: 'furniture',
     Repairs: 'repairs',
     Vacation: 'vacation',
@@ -25,6 +27,7 @@ const EarningsAndExpensesColumns = {
     Bonus: 'bonus',
     TaxRefund: 'tax_refund',
     RewardsSpent: 'rewards_spent',
+    Interest: 'interest',
 
     // Not in database
     Year: 'year',

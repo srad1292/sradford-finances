@@ -6,11 +6,12 @@ EarningsAndExpensesValidator = {
     expenseColumns: [
         COLUMNS.Mortgage, COLUMNS.Utilities, COLUMNS.Hoa, COLUMNS.Insurance, 
         COLUMNS.CarPayment, COLUMNS.Gas, COLUMNS.PropertyTax, COLUMNS.Taxes, COLUMNS.Groceries, COLUMNS.Entertainment, 
-        COLUMNS.Gifts, COLUMNS.EatingOut, COLUMNS.Clothes, COLUMNS.Furniture, COLUMNS.Repairs, 
+        COLUMNS.Gifts, COLUMNS.EatingOut, COLUMNS.Clothes, COLUMNS.HomeNeeds,
+        COLUMNS.KitchenNeeds, COLUMNS.Furniture, COLUMNS.Repairs, 
         COLUMNS.Vacation, COLUMNS.Lodging, COLUMNS.Vet, COLUMNS.Medical, COLUMNS.Misc,
 
     ],
-    earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund, COLUMNS.RewardsSpent],
+    earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund, COLUMNS.RewardsSpent, COLUMNS.Interest],
     getUpdateColumns: () => [COLUMNS.Id, ...EarningsAndExpensesValidator.getCreateColumns()],
     getCreateColumns: () => { return [COLUMNS.FinanceDate, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
     getYearlySheetColumns: () => { return [COLUMNS.Year, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
