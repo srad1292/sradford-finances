@@ -16,6 +16,7 @@ const EarningsAndExpensesColumns = {
     Clothes: 'clothes',
     HomeNeeds: 'home_needs',
     KitchenNeeds: 'kitchen_needs',
+    LawnNeeds: 'lawn_needs',
     Furniture: 'furniture',
     Repairs: 'repairs',
     Vacation: 'vacation',
