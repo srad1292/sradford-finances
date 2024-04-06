@@ -8,7 +8,7 @@ EarningsAndExpensesValidator = {
         COLUMNS.CarPayment, COLUMNS.Gas, COLUMNS.PropertyTax, COLUMNS.Taxes, COLUMNS.Groceries, COLUMNS.Entertainment, 
         COLUMNS.Gifts, COLUMNS.EatingOut, COLUMNS.Clothes, 
         COLUMNS.HomeNeeds, COLUMNS.KitchenNeeds, COLUMNS.LawnNeeds,
-        COLUMNS.Furniture, COLUMNS.Repairs, 
+        COLUMNS.Furniture, COLUMNS.Maintenance, COLUMNS.Repairs, 
         COLUMNS.Vacation, COLUMNS.Lodging, COLUMNS.Vet, COLUMNS.Medical, COLUMNS.Misc,
 
     ],
