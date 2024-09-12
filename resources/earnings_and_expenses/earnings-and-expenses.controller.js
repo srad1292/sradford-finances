@@ -112,7 +112,7 @@ EarningsAndExpensesController = {
             const db = await Database.getDb();
             const records = await EarningsAndExpensesService.getAllData(db);
             const sheetData = EarningsAndExpensesService.convertMonthlyDbToSheet(records);
-            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Earnings-and-expenses-monthly', EarningsAndExpensesValidator.getCreateColumns(), sheetData);
+            const financeWorkbook = await DocumentManager.CreateSpreadsheet('Earnings-and-expenses-monthly', EarningsAndExpensesValidator.getMonthlySheetColumns(), sheetData);
             financeWorkbook.write('AllFinanceData.xlsx', res);
         } catch(e) {
             next(e);

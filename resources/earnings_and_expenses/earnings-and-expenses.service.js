@@ -60,13 +60,26 @@ EarningsAndExpensesService = {
     convertMonthlyDbToSheet: (data) => {
         return data.map(row => {
             let data = [];
-            EarningsAndExpensesValidator.getCreateColumns().forEach(column => {
-                if(column === DatabaseColumns.EarningsAndExpensesColumns.FinanceDate) {
-                    data.push({type: 'String', value: row[column]});
-                } else {
-                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
-                }
+            data.push({type: 'String', value: row[DatabaseColumns.EarningsAndExpensesColumns.FinanceDate]});
+            let expenses = 0;
+            let earnings = 0;
+            let value = 0;
+            EarningsAndExpensesValidator.expenseColumns.forEach(column => {
+                value = Money.centsToMoney(row[column]);
+                data.push({type: 'Number', value: value});
+                expenses += value;
             });
+
+            EarningsAndExpensesValidator.earningsColumns.forEach(column => {
+                value = Money.centsToMoney(row[column]);
+                data.push({type: 'Number', value: value});
+                earnings += value;
+            });
+
+            data.push({type: 'Number', value: expenses});
+            data.push({type: 'Number', value: earnings});
+            data.push({type: 'Number', value: earnings-expenses});
+
             return data;
         });
     },
