@@ -3,6 +3,7 @@ const EarningsAndExpensesColumns = {
     FinanceDate: 'finance_date',
     Mortgage: 'mortgage',
     Utilities: 'utilities',
+    Software: 'software',
     Hoa: "hoa",
     Insurance: 'insurance',
     CarPayment: 'car_payment',

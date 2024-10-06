@@ -4,7 +4,7 @@ const COLUMNS = DatabaseColumns.EarningsAndExpensesColumns;
 
 EarningsAndExpensesValidator = {
     expenseColumns: [
-        COLUMNS.Mortgage, COLUMNS.Utilities, COLUMNS.Hoa, COLUMNS.Insurance, 
+        COLUMNS.Mortgage, COLUMNS.Utilities, COLUMNS.Software, COLUMNS.Hoa, COLUMNS.Insurance, 
         COLUMNS.CarPayment, COLUMNS.Gas, COLUMNS.PropertyTax, COLUMNS.Taxes, COLUMNS.Groceries, COLUMNS.Entertainment, 
         COLUMNS.Gifts, COLUMNS.EatingOut, COLUMNS.Clothes, 
         COLUMNS.HomeNeeds, COLUMNS.KitchenNeeds, COLUMNS.LawnNeeds,

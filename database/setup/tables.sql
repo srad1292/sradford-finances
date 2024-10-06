@@ -42,4 +42,5 @@ ALTER TABLE earnings_and_expenses ADD COLUMN kitchen_needs INTEGER DEFAULT 0;
 ALTER TABLE earnings_and_expenses ADD COLUMN interest INTEGER DEFAULT 0;
 ALTER TABLE earnings_and_expenses ADD COLUMN lawn_needs INTEGER DEFAULT 0;
 ALTER TABLE earnings_and_expenses ADD COLUMN maintenance INTEGER DEFAULT 0;
+ALTER TABLE earnings_and_expenses ADD COLUMN software INTEGER DEFAULT 0;
 
