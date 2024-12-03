@@ -13,6 +13,7 @@ const EarningsAndExpensesColumns = {
     Groceries: 'groceries',
     Entertainment: 'entertainment',
     Gifts: 'gifts',
+    Donations: 'donations',
     EatingOut: 'eating_out',
     Clothes: 'clothes',
     HomeNeeds: 'home_needs',
