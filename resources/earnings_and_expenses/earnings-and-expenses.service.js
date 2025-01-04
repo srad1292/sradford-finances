@@ -58,7 +58,11 @@ EarningsAndExpensesService = {
         return rowAsJs;
     },
     convertMonthlyDbToSheet: (data) => {
-        return data.map(row => {
+        let sheet = [];
+        let totals = {};
+        let totalExpenses = 0;
+        let totalEarnings = 0;
+        sheet = data.map(row => {
             let data = [];
             data.push({type: 'String', value: row[DatabaseColumns.EarningsAndExpensesColumns.FinanceDate]});
             let expenses = 0;
@@ -68,12 +72,16 @@ EarningsAndExpensesService = {
                 value = Money.centsToMoney(row[column]);
                 data.push({type: 'Number', value: value});
                 expenses += value;
+                totalExpenses += value;
+                totals[column] = (totals[column] || 0) + value;
             });
 
             EarningsAndExpensesValidator.earningsColumns.forEach(column => {
                 value = Money.centsToMoney(row[column]);
                 data.push({type: 'Number', value: value});
                 earnings += value;
+                totalEarnings += value;
+                totals[column] = (totals[column] || 0) + value;
             });
 
             data.push({type: 'Number', value: expenses});
@@ -82,19 +90,62 @@ EarningsAndExpensesService = {
 
             return data;
         });
+
+        let totalsRow = [...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns].map(column => {
+            return {type: 'Number', value: totals[column]};
+        });
+
+        totalsRow.unshift({type: 'String', value: 'Total'});
+        totalsRow.push({type: 'Number', value: totalExpenses});
+        totalsRow.push({type: 'Number', value: totalEarnings});
+        totalsRow.push({type: 'Number', value: totalEarnings-totalExpenses});
+        sheet.push(totalsRow);
+        return sheet;
     },
     convertToYearlySheet: (data) => {
-        return data.map(row => {
+        let sheet = [];
+        let totals = {};
+        let totalExpenses = 0;
+        let totalEarnings = 0;
+        sheet = data.map(row => {
             let data = [];
-            EarningsAndExpensesValidator.getYearlySheetColumns().forEach(column => {
-                if(column === DatabaseColumns.EarningsAndExpensesColumns.Year) {
-                    data.push({type: 'String', value: row[column]});
-                } else {
-                    data.push({type: 'Number', value: Money.centsToMoney(row[column])});
-                }
+            data.push({type: 'String', value: row[DatabaseColumns.EarningsAndExpensesColumns.Year]});
+            let expenses = 0;
+            let earnings = 0;
+            let value = 0;
+
+            EarningsAndExpensesValidator.expenseColumns.forEach(column => {
+                value = Money.centsToMoney(row[column]);
+                data.push({type: 'Number', value: value});
+                expenses += value;
+                totalExpenses += value;
+                totals[column] = (totals[column] || 0) + value;
             });
+
+            EarningsAndExpensesValidator.earningsColumns.forEach(column => {
+                value = Money.centsToMoney(row[column]);
+                data.push({type: 'Number', value: value});
+                earnings += value;
+                totalEarnings += value;
+                totals[column] = (totals[column] || 0) + value;
+            });
+
+            data.push({type: 'Number', value: expenses});
+            data.push({type: 'Number', value: earnings});
+            data.push({type: 'Number', value: earnings-expenses});
             return data;
         });
+
+        let totalsRow = [...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns].map(column => {
+            return {type: 'Number', value: totals[column]};
+        });
+
+        totalsRow.unshift({type: 'String', value: 'Total'});
+        totalsRow.push({type: 'Number', value: totalExpenses});
+        totalsRow.push({type: 'Number', value: totalEarnings});
+        totalsRow.push({type: 'Number', value: totalEarnings-totalExpenses});
+        sheet.push(totalsRow);
+        return sheet;
     },
     
     

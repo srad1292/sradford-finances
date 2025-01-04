@@ -16,11 +16,9 @@ const InvestmentsDao = {
         let values = dbData.values;
         let sql = `INSERT INTO ${DatabaseTable.investments}${columns} VALUES${placeholders}`;
         
-        // console.log(dbData);
         try {
             const runResult = await db.run(sql, values);
             return {id: runResult.lastID, ...body};
-            // return {id: 1000, ...body};
         } catch (e) {
             throw new DatabaseException("Error creating investments data: " + e, 500);
         }
@@ -64,7 +62,6 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -82,10 +79,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        console.log("Investments by year");
-        console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     updateRecord: async(db, body) => {
@@ -100,7 +94,6 @@ const InvestmentsDao = {
                 throw new APIException("No record found with ID: " + body.id, [], 404);
             }
             return {id: body.id, ...body};
-            // return {id: 1000, ...body};
         } catch (e) {
             if(e instanceof APIException) {
                 throw(e);
@@ -128,7 +121,6 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -146,9 +138,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        // console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     getNetContributionsByMonth: async (db, filters = {}) => {
@@ -156,7 +146,6 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -174,9 +163,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        // console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     getGainsByMonth: async (db, filters = {}) => {
@@ -184,7 +171,6 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -202,9 +188,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        // console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     getGrowthByMonth: async (db, filters = {}) => {
@@ -212,7 +196,6 @@ const InvestmentsDao = {
         let where = InvestmentsDao.buildWhereClauseWithDates(filters);
         let order = `ORDER BY ${COLUMNS.RecordDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        // console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -230,10 +213,7 @@ const InvestmentsDao = {
           HAVING ${COLUMNS.RecordDate} = MIN(${COLUMNS.RecordDate})
         ) AS subquery
         ORDER BY ${YearColumns.Year};`
-        // console.log("Investments by year");
-        // console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     // DAO helpers

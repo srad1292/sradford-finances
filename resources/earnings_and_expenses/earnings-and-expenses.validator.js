@@ -13,10 +13,11 @@ EarningsAndExpensesValidator = {
 
     ],
     earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund, COLUMNS.RewardsSpent, COLUMNS.Interest],
+    totalsColumns: ['Total Expenses', 'Total Earnings', 'Net Gain'],
     getUpdateColumns: () => [COLUMNS.Id, ...EarningsAndExpensesValidator.getCreateColumns()],
     getCreateColumns: () => { return [COLUMNS.FinanceDate, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
-    getMonthlySheetColumns: () => { return [COLUMNS.FinanceDate, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns, 'Total Expenses', 'Total Earnings', 'Net Gain']; },
-    getYearlySheetColumns: () => { return [COLUMNS.Year, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
+    getMonthlySheetColumns: () => { return [COLUMNS.FinanceDate, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns, ...EarningsAndExpensesValidator.totalsColumns ]; },
+    getYearlySheetColumns: () => { return [COLUMNS.Year, ...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns, ...EarningsAndExpensesValidator.totalsColumns]; },
     getValueColumns: () => { return [...EarningsAndExpensesValidator.expenseColumns, ...EarningsAndExpensesValidator.earningsColumns]; },
     validateCreateData: (body) => {
         let errors = [];

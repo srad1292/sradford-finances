@@ -57,7 +57,6 @@ EarningsAndExpensesController = {
                 startDate: req.query.startDate,
                 endDate: req.query.endDate,
             }
-            console.log(filter);
             const records = await EarningsAndExpensesService.getAllData(db, filter);
             const result = records.map(r => EarningsAndExpensesService.convertMonthlyDbToJson(r));
             res.status(200).send(result);

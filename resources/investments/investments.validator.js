@@ -71,10 +71,6 @@ InvestmentsValidator = {
                 errors.push({index: idx, firm: !!firm ? firm : 'unknown', property: camelDate, error: 'Record date should be the same for each firm'});
             }
 
-            // if(idx !== 0) {
-            //     console.log(`record: ${record[COLUMNS.RecordDate]} -- date: ${recordDate} -- not eq ${record[COLUMNS.RecordDate] !== recordDate}`);
-            // }
-
             let recordErrors = InvestmentsValidator.validateCreateData(record);
             recordErrors.forEach(error => {
                 errors.push({index: idx, firm: !!firm ? firm : 'unknown', ...error});
