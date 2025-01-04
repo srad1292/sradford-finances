@@ -18,8 +18,6 @@ AnalyticsService = {
             });
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },
@@ -38,8 +36,6 @@ AnalyticsService = {
             result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.FinanceDate], value: sum});
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },
@@ -58,8 +54,6 @@ AnalyticsService = {
             result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.Year], value: sum});
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },
@@ -77,8 +71,6 @@ AnalyticsService = {
             result.push({label: data[row][dateColumn], value: Money.centsToMoney(sum)});
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },
@@ -97,8 +89,6 @@ AnalyticsService = {
             result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.FinanceDate], value: sum});
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },
@@ -117,8 +107,6 @@ AnalyticsService = {
             result.push({label: data[row][DatabaseColumns.EarningsAndExpensesColumns.Year], value: sum});
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },
@@ -136,8 +124,6 @@ AnalyticsService = {
             result.push({label: data[row][dateColumn], value: Money.centsToMoney(sum)});
         }
 
-        // console.log("Converted to expenses");
-        // console.log(result);
         return result;
         
     },

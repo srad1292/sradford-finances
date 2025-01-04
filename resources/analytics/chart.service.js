@@ -25,14 +25,8 @@ ChartService = {
         return dataUrl;
     },
     createVerticalBarChartConfig: (data, title, options) => {
-        console.log("Vertical bar chart data");
-        console.log(data);
         const labels = data.map(i => Convert.snakeToTitle(i.label));
-        console.log("vertical bar chart labels");
-        console.log(labels);
         const vertData = data.map(i => i.value);
-        console.log("vertical bar chart data");
-        console.log(vertData);
         return config = {
             type: 'bar',
             data: {

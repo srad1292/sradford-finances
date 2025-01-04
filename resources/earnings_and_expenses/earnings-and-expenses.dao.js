@@ -15,11 +15,9 @@ EarningsAndExpensesDao = {
         let values = dbData.values;
         let sql = `INSERT INTO ${DatabaseTable.EarningsAndExpenses}${columns} VALUES${placeholders}`;
         
-        console.log(dbData);
         try {
             const runResult = await db.run(sql, values);
             return {id: runResult.lastID, ...body};
-            // return {id: 1000, ...body};
         } catch (e) {
             throw new DatabaseException("Error creating monthly data: " + e, 500);
         }
@@ -49,8 +47,6 @@ EarningsAndExpensesDao = {
         let sql = `SELECT ${colQuery} FROM ${DatabaseTable.EarningsAndExpenses} WHERE ${DatabaseColumns.EarningsAndExpensesColumns.Id} = ${id};`
         try {
             let data = await db.get(sql);
-            console.log("done with sql get by id");
-            console.log(data);
             if(data === null || data === undefined) {
                 throw new APIException("No record found with ID: " + id, [], 404);
             }
@@ -75,7 +71,6 @@ EarningsAndExpensesDao = {
         }
         let order = `ORDER BY ${DatabaseColumns.EarningsAndExpensesColumns.FinanceDate} ${filters.sort === 'DESC' ? 'DESC' : 'ASC'};`;
         let sql = where === '' ? select + " " + order : select + " " + where + " " + order;
-        console.log(sql);
         try {
             let data = await db.all(sql);
             return data;
@@ -96,10 +91,7 @@ EarningsAndExpensesDao = {
           HAVING ${COLUMNS.FinanceDate} = MIN(${COLUMNS.FinanceDate})
         ) AS subquery
         ORDER BY ${COLUMNS.Year};`
-        console.log("Earnings and invest get by year");
-        console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     getExpensesByYear: async(db, filters = {}) => {
@@ -115,9 +107,7 @@ EarningsAndExpensesDao = {
           HAVING ${COLUMNS.FinanceDate} = MIN(${COLUMNS.FinanceDate})
         ) AS subquery
         ORDER BY ${COLUMNS.Year};`
-        // console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
     getEarningsByYear: async(db, filters = {}) => {
@@ -133,9 +123,7 @@ EarningsAndExpensesDao = {
           HAVING ${COLUMNS.FinanceDate} = MIN(${COLUMNS.FinanceDate})
         ) AS subquery
         ORDER BY ${COLUMNS.Year};`
-        // console.log(sql);
         let data = await db.all(sql);
-        // console.log(data);
         return data;
     },
 
