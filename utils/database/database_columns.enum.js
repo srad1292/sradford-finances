@@ -26,6 +26,7 @@ const EarningsAndExpensesColumns = {
     Lodging: 'lodging',
     Vet: 'vet',
     Medical: 'medical',
+    Fitness: 'fitness',
     Misc: 'misc',
     Salary: 'salary',
     Bonus: 'bonus',

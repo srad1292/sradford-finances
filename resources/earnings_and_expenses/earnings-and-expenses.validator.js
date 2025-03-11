@@ -9,7 +9,7 @@ EarningsAndExpensesValidator = {
         COLUMNS.Gifts, COLUMNS.Donations, COLUMNS.EatingOut, COLUMNS.Clothes, 
         COLUMNS.HomeNeeds, COLUMNS.KitchenNeeds, COLUMNS.LawnNeeds,
         COLUMNS.Furniture, COLUMNS.Maintenance, COLUMNS.Repairs, 
-        COLUMNS.Vacation, COLUMNS.Lodging, COLUMNS.Vet, COLUMNS.Medical, COLUMNS.Misc,
+        COLUMNS.Vacation, COLUMNS.Lodging, COLUMNS.Vet, COLUMNS.Medical, COLUMNS.Fitness, COLUMNS.Misc,
 
     ],
     earningsColumns: [COLUMNS.Salary, COLUMNS.Bonus, COLUMNS.TaxRefund, COLUMNS.RewardsSpent, COLUMNS.Interest],
